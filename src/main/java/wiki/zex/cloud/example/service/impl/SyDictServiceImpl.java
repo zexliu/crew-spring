@@ -3,13 +3,18 @@ package wiki.zex.cloud.example.service.impl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import wiki.zex.cloud.example.entity.SyDict;
+import wiki.zex.cloud.example.entity.SyDictEntry;
 import wiki.zex.cloud.example.mapper.SyDictMapper;
 import wiki.zex.cloud.example.req.SyDictReq;
-import wiki.zex.cloud.example.resp.SimpleResp;
+import wiki.zex.cloud.example.resp.SyDictTree;
 import wiki.zex.cloud.example.service.ISyDictEntryService;
 import wiki.zex.cloud.example.service.ISyDictService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -45,7 +50,19 @@ public class SyDictServiceImpl extends ServiceImpl<SyDictMapper, SyDict> impleme
     @Override
     public void delete(Long id) {
         SyDict syDict = getById(id);
-        iSyDictEntryService.removeByDectId(syDict.getDictCode());
+        iSyDictEntryService.removeByDictId(syDict.getDictCode());
         removeById(id);
+    }
+
+
+
+    @Override
+    public Map<String, List<SyDictEntry>> dictMap() {
+        List<SyDictTree> dictTree = baseMapper.dictTree();
+        Map<String, List<SyDictEntry>> map  = new HashMap<>();
+        for (SyDictTree syDictTree : dictTree) {
+            map.put(syDictTree.getDictCode(),syDictTree.getEntries());
+        }
+        return map;
     }
 }

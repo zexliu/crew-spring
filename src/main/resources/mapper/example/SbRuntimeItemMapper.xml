@@ -49,7 +49,7 @@
             <if test="tableId != null">
                 and sri.table_id = #{tableId}
             </if>
-            <if test="trainNo != null">
+            <if test="trainNo != null and trainNo != ''">
                 and sri.train_no = #{trainNo}
             </if>
             <if test="up != null">

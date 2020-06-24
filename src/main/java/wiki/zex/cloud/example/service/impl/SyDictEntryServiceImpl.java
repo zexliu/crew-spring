@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class SyDictEntryServiceImpl extends ServiceImpl<SyDictEntryMapper, SyDictEntry> implements ISyDictEntryService {
 
     @Override
-    public void removeByDectId(String dictCode) {
+    public void removeByDictId(String dictCode) {
         remove(new LambdaQueryWrapper<SyDictEntry>().eq(SyDictEntry::getDictCode,dictCode));
     }
 

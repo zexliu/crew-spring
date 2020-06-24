@@ -7,11 +7,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import wiki.zex.cloud.example.entity.SyDict;
+import wiki.zex.cloud.example.entity.SyDictEntry;
 import wiki.zex.cloud.example.req.Pageable;
 import wiki.zex.cloud.example.req.SyDictReq;
 import wiki.zex.cloud.example.resp.SimpleResp;
 import wiki.zex.cloud.example.service.ISyDictService;
+
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -24,30 +28,34 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/dicts")
 public class SyDictController {
-
     @Autowired
     private ISyDictService iSyDictService;
 
     @GetMapping
-    public IPage<SyDict> list(Pageable pageable,String dictName,String dictCode){
-        return iSyDictService.page(pageable.convert(),new LambdaQueryWrapper<SyDict>()
-        .like(StringUtils.isNotBlank(dictName),SyDict::getDictName,dictName)
-        .like(StringUtils.isNotBlank(dictCode),SyDict::getDictCode,dictCode));
+    public IPage<SyDict> list(Pageable pageable, String dictName, String dictCode) {
+        return iSyDictService.page(pageable.convert(), new LambdaQueryWrapper<SyDict>()
+                .like(StringUtils.isNotBlank(dictName), SyDict::getDictName, dictName)
+                .like(StringUtils.isNotBlank(dictCode), SyDict::getDictCode, dictCode));
+    }
+
+    @GetMapping("/map")
+    public Map<String,List<SyDictEntry>> dictMap() {
+        return iSyDictService.dictMap();
     }
 
     @PostMapping
-    public SyDict create(@RequestBody @Valid SyDictReq req){
+    public SyDict create(@RequestBody @Valid SyDictReq req) {
         return iSyDictService.create(req);
     }
 
     @PutMapping("/{id}")
-    public SyDict update(@PathVariable Long id ,@RequestBody @Valid SyDictReq req){
-        return iSyDictService.update(id,req);
+    public SyDict update(@PathVariable Long id, @RequestBody @Valid SyDictReq req) {
+        return iSyDictService.update(id, req);
     }
 
     @DeleteMapping("/{id}")
-    public SimpleResp delete(@PathVariable Long id){
-         iSyDictService.delete(id);
+    public SimpleResp delete(@PathVariable Long id) {
+        iSyDictService.delete(id);
         return SimpleResp.SUCCESS;
     }
 

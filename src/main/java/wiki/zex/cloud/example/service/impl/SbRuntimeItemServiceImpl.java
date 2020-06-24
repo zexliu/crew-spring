@@ -82,7 +82,7 @@ public class SbRuntimeItemServiceImpl extends ServiceImpl<SbRuntimeItemMapper, S
 
     @Override
     public IPage<SbRuntimeItemResp> page(Page<SbRuntimeItemResp> page, Long startStationId, Long endStationId, Long tableId, String serviceNo, String trainNo, Boolean up) {
-        return baseMapper.page(page,startStationId,endStationId,tableId,serviceNo,trainNo,up);
+        return baseMapper.page(page, startStationId, endStationId, tableId, serviceNo, trainNo, up);
     }
 
     @Override
@@ -96,11 +96,12 @@ public class SbRuntimeItemServiceImpl extends ServiceImpl<SbRuntimeItemMapper, S
         String tableIdStr = request.getParameter("tableId");
         Long tableId = Long.valueOf(tableIdStr);
         //移除旧数据
-        remove(new LambdaUpdateWrapper<SbRuntimeItem>().eq(SbRuntimeItem::getTableId,tableId));
+        remove(new LambdaUpdateWrapper<SbRuntimeItem>().eq(SbRuntimeItem::getTableId, tableId));
         List<SbStation> downLine = iSbStationService.downLine();
         List<SbStation> upLine = iSbStationService.upLine();
         EasyExcel.read(file.getInputStream(), new AnalysisEventListener<Map<Integer, String>>() {
             final List<List<String>> data = new ArrayList<>();
+
             @Override
             public void invoke(Map<Integer, String> map, AnalysisContext context) {
                 if (MapUtils.isEmpty(map)) {
@@ -172,7 +173,7 @@ public class SbRuntimeItemServiceImpl extends ServiceImpl<SbRuntimeItemMapper, S
         String trainNo = list.get(1);
 
         //判断车次是否为空 最后一个表有缺数据
-        if (StringUtils.isEmpty(trainNo)){
+        if (StringUtils.isEmpty(trainNo)) {
             return;
         }
         item.setTrainNo(trainNo);
@@ -206,13 +207,13 @@ public class SbRuntimeItemServiceImpl extends ServiceImpl<SbRuntimeItemMapper, S
         //终点站ID
         item.setEndStationId(subStations.get(subStations.size() - 1).getStationId());
 
+
         //开点
         item.setStartAt(formatTime(subStations.get(0).getStartAt()));
         //到点
         item.setEndAt(formatTime(subStations.get(subStations.size() - 1).getEndAt()));
 
         //总里程
-
         float distance = 0;
 
         boolean isRunning = false;
@@ -236,15 +237,15 @@ public class SbRuntimeItemServiceImpl extends ServiceImpl<SbRuntimeItemMapper, S
 
     private static LocalTime formatTime(String timeStr) {
 
-        if (StringUtils.equals(timeStr,"▲")||StringUtils.equals(timeStr,"▼")){
+        if (StringUtils.equals(timeStr, "▲") || StringUtils.equals(timeStr, "▼")) {
             return null;
         }
         if (timeStr.length() == 10) {
             timeStr = "0" + timeStr;
         }
 
-        int hour = StringUtils.equals(timeStr.substring(timeStr.length() -2), "上午") ? 0 : 12;
-        timeStr = timeStr.substring(0,timeStr.length() -3);
+        int hour = StringUtils.equals(timeStr.substring(timeStr.length() - 2), "上午") ? 0 : 12;
+        timeStr = timeStr.substring(0, timeStr.length() - 3);
         return LocalTime.parse(timeStr).plusHours(hour);
     }
 

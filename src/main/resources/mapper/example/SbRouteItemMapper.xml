@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SbRouteItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SbRouteItem">
+        <id column="id" property="id" />
+        <result column="table_id" property="tableId" />
+        <result column="shift_id" property="shiftId" />
+        <result column="route_item_no" property="routeItemNo" />
+        <result column="attendance_station_id" property="attendanceStationId" />
+        <result column="attendance_at" property="attendanceAt" />
+        <result column="meet_at" property="meetAt" />
+        <result column="meet_train_no" property="meetTrainNo" />
+        <result column="meet_station_id" property="meetStationId" />
+        <result column="train_numbers" property="trainNumbers" />
+        <result column="back_train_no" property="backTrainNo" />
+        <result column="back_station_id" property="backStationId" />
+        <result column="back_at" property="backAt" />
+        <result column="distance" property="distance" />
+        <result column="remark" property="remark" />
+        <result column="description" property="description" />
+        <result column="create_at" property="createAt" />
+    </resultMap>
+
+</mapper>

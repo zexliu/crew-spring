@@ -30,7 +30,7 @@ public class SyDictEntryController {
     @GetMapping
     public IPage<SyDictEntry> list(Pageable pageable,String dictCode){
         return iSyDictEntryService.page(pageable.convert(),new LambdaQueryWrapper<SyDictEntry>()
-        .eq(StringUtils.isNotBlank(dictCode),SyDictEntry::getDictCode,dictCode));
+        .eq(StringUtils.isNotBlank(dictCode),SyDictEntry::getDictCode,dictCode).orderByDesc(SyDictEntry::getSeq));
     }
 
     @PostMapping

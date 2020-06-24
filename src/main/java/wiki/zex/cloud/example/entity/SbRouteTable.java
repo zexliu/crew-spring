@@ -1,6 +1,7 @@
 package wiki.zex.cloud.example.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
@@ -14,16 +15,17 @@ import wiki.zex.cloud.example.config.serializers.JsonLongSerializer;
 
 /**
  * <p>
- * 
+ * 交路计划表
  * </p>
  *
  * @author Zex
- * @since 2020-06-12
+ * @since 2020-06-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="SbStation对象", description="")
-public class SbStation implements Serializable {
+@Accessors(chain = true)
+@ApiModel(value="SbRouteTable对象", description="交路计划表")
+public class SbRouteTable implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,25 +33,17 @@ public class SbStation implements Serializable {
     @JsonSerialize(using = JsonLongSerializer.class)
     private Long id;
 
-    @ApiModelProperty(value = "车站名称")
-    private String stationName;
+    @ApiModelProperty(value = "交路计划名称")
+    private String tableName;
 
-    @ApiModelProperty(value = "车站编码")
-    private String stationCode;
-
-    @ApiModelProperty(value = "下站距离")
-    private Float nextStationDistance;
-
-    @ApiModelProperty(value = "排序")
-    private Integer seq;
+    @ApiModelProperty(value = "运行时刻表")
+    @JsonSerialize(using = JsonLongSerializer.class)
+    private Long runtimeTableId;
 
     @ApiModelProperty(value = "描述")
     private String description;
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createAt;
 
-    @ApiModelProperty(value = "是否停车场")
-    private Boolean isPark;
-
-    @ApiModelProperty(value = "是否折返点")
-    private Boolean isReturn;
 
 }

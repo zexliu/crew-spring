@@ -15,7 +15,7 @@ import wiki.zex.cloud.example.req.SyDictEntryReq;
  */
 public interface ISyDictEntryService extends IService<SyDictEntry> {
 
-    void removeByDectId(String dictCode);
+    void removeByDictId(String dictCode);
 
     SyDictEntry create(SyDictEntryReq req);
 

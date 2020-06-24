@@ -37,7 +37,7 @@ public class SbRuntimeItemController {
     }
 
     @GetMapping("/{id}")
-    public SbRuntimeItem  update(@PathVariable Long id ){
+    public SbRuntimeItem  getById(@PathVariable Long id ){
         return iSbRuntimeItemService.getById(id);
     }
     @PostMapping

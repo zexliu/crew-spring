@@ -2,6 +2,9 @@ package wiki.zex.cloud.example.mapper;
 
 import wiki.zex.cloud.example.entity.SyDict;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import wiki.zex.cloud.example.resp.SyDictTree;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-06-02
  */
 public interface SyDictMapper extends BaseMapper<SyDict> {
+
+    List<SyDictTree> dictTree();
 
 }

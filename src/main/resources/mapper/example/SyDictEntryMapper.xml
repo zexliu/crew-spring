@@ -4,13 +4,27 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SyDictEntry">
-        <id column="id" property="id" />
-        <result column="dict_code" property="dictCode" />
-        <result column="dict_entry_name" property="dictEntryName" />
-        <result column="dict_entry_value" property="dictEntryValue" />
-        <result column="description" property="description" />
-        <result column="create_at" property="createAt" />
-        <result column="seq" property="seq" />
+        <id column="id" property="id"/>
+        <result column="dict_code" property="dictCode"/>
+        <result column="dict_entry_name" property="dictEntryName"/>
+        <result column="dict_entry_value" property="dictEntryValue"/>
+        <result column="description" property="description"/>
+        <result column="create_at" property="createAt"/>
+        <result column="seq" property="seq"/>
     </resultMap>
+    <select id="findByDictCode" resultType="wiki.zex.cloud.example.entity.SyDictEntry">
+        select id,
+               dict_code,
+               dict_entry_name,
+               dict_entry_value,
+               description,
+               create_at,
+               enable,
+               seq
+        from sy_dict_entry
+        where enable
+          and dict_code = #{dictCode}
+        order by seq desc
+    </select>
 
 </mapper>

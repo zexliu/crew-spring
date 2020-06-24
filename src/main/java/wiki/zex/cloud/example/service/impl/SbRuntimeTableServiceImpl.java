@@ -7,6 +7,7 @@ import wiki.zex.cloud.example.entity.SbRuntimeTable;
 import wiki.zex.cloud.example.mapper.SbRuntimeTableMapper;
 import wiki.zex.cloud.example.req.SbRuntimeTableReq;
 import wiki.zex.cloud.example.service.ISbRuntimeItemService;
+import wiki.zex.cloud.example.service.ISbRuntimeTableDateService;
 import wiki.zex.cloud.example.service.ISbRuntimeTableService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class SbRuntimeTableServiceImpl extends ServiceImpl<SbRuntimeTableMapper, SbRuntimeTable> implements ISbRuntimeTableService {
 
+    @Autowired
+    private ISbRuntimeTableDateService iSbRuntimeTableDateService;
 
     @Autowired
     private ISbRuntimeItemService iSbRuntimeItemService;
@@ -45,6 +48,7 @@ public class SbRuntimeTableServiceImpl extends ServiceImpl<SbRuntimeTableMapper,
     @Override
     public void delete(Long id) {
         iSbRuntimeItemService.removeByTableId(id);
+        iSbRuntimeTableDateService.removeByTableId(id);
         removeById(id);
     }
 }

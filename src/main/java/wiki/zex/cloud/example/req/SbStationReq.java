@@ -1,12 +1,9 @@
 package wiki.zex.cloud.example.req;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -36,7 +33,7 @@ public class SbStationReq implements Serializable {
     @Length(min = 2,max = 30)
     private String stationCode;
 
-    private Long nextStationId;
+//    private Long nextStationId;
 
     @ApiModelProperty(value = "下站距离")
     private Float nextStationDistance;
@@ -48,5 +45,11 @@ public class SbStationReq implements Serializable {
     @Length(max = 200)
     private String description;
 
+
+    @ApiModelProperty(value = "是否停车场")
+    private Boolean isPark;
+
+    @ApiModelProperty(value = "是否折返点")
+    private Boolean isReturn;
 
 }

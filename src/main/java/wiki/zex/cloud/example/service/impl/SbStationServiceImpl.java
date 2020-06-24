@@ -46,40 +46,48 @@ public class SbStationServiceImpl extends ServiceImpl<SbStationMapper, SbStation
 
     @Override
     public List<SbStation> downLine() {
-        List<SbStation> stations = list(new LambdaQueryWrapper<>());
-        List<SbStation> downLine = new ArrayList<>();
-        reserveStations(stations,null,downLine);
-        Collections.reverse(downLine);
-        return downLine;
+//        List<SbStation> stations = list(new LambdaQueryWrapper<>());
+        //        reserveStations(stations,null,downLine);
+//        Collections.reverse(downLine);
+        return list(new LambdaQueryWrapper<SbStation>().orderByDesc(SbStation::getSeq).orderByAsc(SbStation::getId));
     }
 
     @Override
     public List<SbStation> upLine() {
-        List<SbStation> downLine = downLine();
-        List<SbStation> upLine = new ArrayList<>();
-        for (int i = downLine.size() - 1; i >= 0 ; i--) {
-
-            SbStation station = downLine.get(i);
-            if (i > 0){
-                SbStation next = downLine.get(i - 1);
-                station.setNextStationId(next.getId());
-                station.setNextStationDistance(next.getNextStationDistance());
+        List<SbStation> upLine = downLine();
+        Collections.reverse(upLine);
+        for (int i = 0; i < upLine.size(); i++) {
+            if (i == upLine.size() - 1) {
+                upLine.get(i).setNextStationDistance(0F);
+                break;
+            } else {
+                upLine.get(i).setNextStationDistance(upLine.get(i + 1).getNextStationDistance());
             }
-         upLine.add(station);
         }
+//        List<SbStation> upLine = new ArrayList<>();
+//        for (int i = downLine.size() - 1; i >= 0 ; i--) {
+//
+//            SbStation station = downLine.get(i);
+//            if (i > 0){
+//                SbStation next = downLine.get(i - 1);
+//                station.setNextStationId(next.getId());
+//                station.setNextStationDistance(next.getNextStationDistance());
+//            }
+//         upLine.add(station);
+//        }
         return upLine;
     }
-
-    private void reserveStations( List<SbStation> stations, Long nextId , List<SbStation> downLine){
-        for (SbStation station : stations) {
-            if ((station.getNextStationId() == null && nextId == null )||
-                    (station.getNextStationId() != null &&station.getNextStationId().equals(nextId))){
-                downLine.add(station);
-                reserveStations(stations, station.getId(), downLine);
-                return;
-            }
-
-        }
-    }
+//
+//    private void reserveStations( List<SbStation> stations, Long nextId , List<SbStation> downLine){
+//        for (SbStation station : stations) {
+//            if ((station.getNextStationId() == null && nextId == null )||
+//                    (station.getNextStationId() != null &&station.getNextStationId().equals(nextId))){
+//                downLine.add(station);
+//                reserveStations(stations, station.getId(), downLine);
+//                return;
+//            }
+//
+//        }
+//    }
 
 }

@@ -10,5 +10,15 @@
         <result column="description" property="description" />
         <result column="create_at" property="createAt" />
     </resultMap>
+    <resultMap id="DictTree" type="wiki.zex.cloud.example.resp.SyDictTree" extends="BaseResultMap">
+        <collection property="entries"
+                    select="wiki.zex.cloud.example.mapper.SyDictEntryMapper.findByDictCode"
+                    column="dictCode = dict_code"
+        />
+    </resultMap>
+    <select id="dictTree" resultMap="DictTree">
+        select  id, dict_name, dict_code, description, create_at
+        from   sy_dict
+    </select>
 
 </mapper>

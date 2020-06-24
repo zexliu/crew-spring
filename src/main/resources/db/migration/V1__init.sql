@@ -208,10 +208,11 @@ CREATE TABLE `sb_station` (
                               `id` bigint(11) NOT NULL,
                               `station_name` varchar(32) NULL COMMENT '车站名称',
                               `station_code` varchar(32) NULL COMMENT '车站编码',
-                              `next_station_id` bigint(11) NULL COMMENT '下站ID',
                               `next_station_distance` float(10,2) NULL COMMENT '下站距离',
                               `seq` int(11) NULL DEFAULT 0 COMMENT '排序',
                               `description` varchar(200) NULL COMMENT '描述',
+                              `is_park` tinyint(1) NULL DEFAULT 0 COMMENT '是否停车场',
+                              `is_return` tinyint(1) NULL DEFAULT 0 COMMENT '是否折返点',
                               PRIMARY KEY (`id`) ,
                               UNIQUE INDEX `uk_station_name` (`station_name` ASC) USING BTREE,
                               UNIQUE INDEX `uk_station_code` (`station_code` ASC) USING BTREE
@@ -242,6 +243,72 @@ CREATE TABLE `sb_runtime_item` (
                                    PRIMARY KEY (`id`)
 )
     COMMENT = '时刻表数据项';
+CREATE TABLE `sb_runtime_table_date` (
+                                         `id` bigint(11) NOT NULL,
+                                         `table_id` bigint(11) NULL COMMENT '时刻表ID',
+                                         `date` date NULL COMMENT '日期',
+                                         `create_at` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+                                         PRIMARY KEY (`id`)
+)
+    COMMENT = '时刻表对应日期';
+CREATE TABLE `sb_route_item` (
+                                 `id` bigint(11) NOT NULL,
+                                 `table_id` bigint(11) NULL COMMENT '交路表ID',
+                                 `shift_id` bigint(11) NULL,
+                                 `route_item_no` varchar(30) NULL COMMENT '交路号',
+                                 `attendance_station_id` bigint(11) NULL COMMENT '出勤站点点',
+                                 `attendance_at` datetime NULL COMMENT '出勤时间',
+                                 `meet_at` datetime NULL COMMENT '接车时间',
+                                 `meet_train_no` varchar(30) NULL COMMENT '接车车次',
+                                 `meet_station_id` bigint(11) NULL COMMENT '接车第点',
+                                 `train_numbers` varchar(255) NULL COMMENT '开行交路',
+                                 `back_train_no` varchar(30) NULL COMMENT '退勤车次',
+                                 `back_station_id` bigint(11) NULL COMMENT '退勤地点',
+                                 `back_at` datetime NULL COMMENT '退勤时间',
+                                 `distance` double(10,2) NULL COMMENT '总公里数',
+                                 `remark` varchar(200) NULL COMMENT '备注',
+                                 `description` varchar(200) NULL COMMENT '描述',
+                                 `create_at` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                 PRIMARY KEY (`id`)
+)
+    COMMENT = '交路计划明细表';
+CREATE TABLE `sb_route_table` (
+                                  `id` bigint(11) NOT NULL,
+                                  `table_name` varchar(30) NULL COMMENT '交路计划名称',
+                                  `runtime_table_id` bigint(11) NULL COMMENT '运行时刻表ID',
+                                  `create_at` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                  `description` varchar(200) NULL COMMENT '描述',
+                                  PRIMARY KEY (`id`) ,
+                                  UNIQUE INDEX `uk_table_name` (`table_name` ASC) USING BTREE,
+                                  UNIQUE INDEX `uk_runtime_table_id` (`runtime_table_id` ASC) USING HASH
+)
+    COMMENT = '交路计划表';
+CREATE TABLE `sb_route_runtime_relation` (
+                                             `id` bigint(11) NOT NULL,
+                                             `route_item_id` bigint(11) NULL,
+                                             `runtime_train_no` varchar(32) NULL,
+                                             PRIMARY KEY (`id`) ,
+                                             UNIQUE INDEX `uk_route_item_id_runtime_item_id` (`route_item_id` ASC, `runtime_train_no` ASC) USING HASH
+)
+    COMMENT = '交路明细时刻明细关联关系';
+CREATE TABLE `sb_shift_group` (
+                                  `id` bigint(11) NOT NULL,
+                                  `group_name` varchar(30) NULL COMMENT '班次组名称',
+                                  `seq` int(11) NULL DEFAULT 0 COMMENT '排序',
+                                  `create_at` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                  `description` varchar(200) NULL COMMENT '描述',
+                                  PRIMARY KEY (`id`)
+)
+    COMMENT = '班次所属';
+CREATE TABLE `sb_shift` (
+                            `id` bigint(11) NOT NULL,
+                            `shift_group_id` bigint(11) NULL COMMENT '班次组ID',
+                            `shift_name` varchar(30) NULL COMMENT '班次名称',
+                            `seq` int(11) NULL DEFAULT 0 COMMENT '排序',
+                            `create_at` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                            PRIMARY KEY (`id`)
+)
+    COMMENT = '班次';
 
 ALTER TABLE `sy_permission` ADD CONSTRAINT `fk_sy_permission_sy_permission_1` FOREIGN KEY (`parent_id`) REFERENCES `sy_permission` (`id`);
 ALTER TABLE `sy_role_permission_rel` ADD CONSTRAINT `fk_sy_role_permission_rel_sy_permission_1` FOREIGN KEY (`permission_id`) REFERENCES `sy_permission` (`id`);
@@ -263,8 +330,15 @@ ALTER TABLE `qa_driver_question_pager` ADD CONSTRAINT `fk_qa_driver_question_pag
 ALTER TABLE `qa_driver_pager_answer` ADD CONSTRAINT `fk_qa_driver_pager_answer_qa_question_1` FOREIGN KEY (`question_id`) REFERENCES `qa_question` (`id`);
 ALTER TABLE `qa_driver_pager_answer` ADD CONSTRAINT `fk_qa_driver_pager_answer_qa_driver_question_pager_1` FOREIGN KEY (`question_pager_id`) REFERENCES `qa_driver_question_pager` (`id`);
 ALTER TABLE `qa_driver_question_pager` ADD CONSTRAINT `fk_qa_driver_question_pager_qa_question_pager_template_1` FOREIGN KEY (`template_id`) REFERENCES `qa_question_pager_template` (`id`);
-ALTER TABLE `sb_station` ADD CONSTRAINT `fk_sb_station_sb_station_1` FOREIGN KEY (`next_station_id`) REFERENCES `sb_station` (`id`);
 ALTER TABLE `sb_runtime_item` ADD CONSTRAINT `fk_sb_runtime_item_sb_runtime_table_1` FOREIGN KEY (`table_id`) REFERENCES `sb_runtime_table` (`id`);
 ALTER TABLE `sb_runtime_item` ADD CONSTRAINT `fk_sb_runtime_item_sb_station_1` FOREIGN KEY (`start_station_id`) REFERENCES `sb_station` (`id`);
 ALTER TABLE `sb_runtime_item` ADD CONSTRAINT `fk_sb_runtime_item_sb_station_2` FOREIGN KEY (`end_station_id`) REFERENCES `sb_station` (`id`);
+ALTER TABLE `sb_runtime_table_date` ADD CONSTRAINT `fk_sb_runtime_table_date_sb_runtime_table_1` FOREIGN KEY (`table_id`) REFERENCES `sb_runtime_table` (`id`);
+ALTER TABLE `sb_route_runtime_relation` ADD CONSTRAINT `fk_sb_route_runtime_relation_sb_route_item_1` FOREIGN KEY (`route_item_id`) REFERENCES `sb_route_item` (`id`);
+ALTER TABLE `sb_route_table` ADD CONSTRAINT `fk_sb_route_table_sb_runtime_table_1` FOREIGN KEY (`runtime_table_id`) REFERENCES `sb_runtime_table` (`id`);
+ALTER TABLE `sb_shift` ADD CONSTRAINT `fk_sb_shift_sb_shift_group_1` FOREIGN KEY (`shift_group_id`) REFERENCES `sb_shift_group` (`id`);
+ALTER TABLE `sb_route_item` ADD CONSTRAINT `fk_sb_route_item_sb_shift_1` FOREIGN KEY (`shift_id`) REFERENCES `sb_shift` (`id`);
+ALTER TABLE `sb_route_item` ADD CONSTRAINT `fk_sb_route_item_sb_route_table_1` FOREIGN KEY (`table_id`) REFERENCES `sb_route_table` (`id`);
+ALTER TABLE `sb_route_item` ADD CONSTRAINT `fk_sb_route_item_sb_station_1` FOREIGN KEY (`meet_station_id`) REFERENCES `sb_station` (`id`);
+ALTER TABLE `sb_route_item` ADD CONSTRAINT `fk_sb_route_item_sb_station_2` FOREIGN KEY (`back_station_id`) REFERENCES `sb_station` (`id`);
 
