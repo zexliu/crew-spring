@@ -44,6 +44,12 @@ public class QaQuestionPagerTemplateController {
     public QaQuestionPagerTemplate create(@Valid @RequestBody QaQuestionPagerTemplateReq req){
         return iQaQuestionPagerTemplateService.create(req);
     }
+
+
+    @GetMapping("/{id}")
+    public QaQuestionPagerTemplate getById(@PathVariable Long id){
+        return iQaQuestionPagerTemplateService.getById(id);
+    }
     @PutMapping("/{id}")
     public QaQuestionPagerTemplate update(@PathVariable Long id,@Valid @RequestBody QaQuestionPagerTemplateReq req){
         return iQaQuestionPagerTemplateService.update(id,req);

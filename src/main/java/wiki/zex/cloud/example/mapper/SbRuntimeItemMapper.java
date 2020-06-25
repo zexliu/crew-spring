@@ -7,6 +7,8 @@ import wiki.zex.cloud.example.entity.SbRuntimeItem;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import wiki.zex.cloud.example.resp.SbRuntimeItemResp;
 
+import java.util.List;
+
 /**
  * <p>
  * 时刻表数据项 Mapper 接口
@@ -17,11 +19,13 @@ import wiki.zex.cloud.example.resp.SbRuntimeItemResp;
  */
 public interface SbRuntimeItemMapper extends BaseMapper<SbRuntimeItem> {
 
-    IPage<SbRuntimeItemResp> page(Page<SbRuntimeItemResp> page, @Param("startStationId") Long startStationId,
+    IPage<SbRuntimeItemResp> page(Page<SbRuntimeItemResp> page,
+                                  @Param("startStationId") Long startStationId,
                                   @Param("endStationId") Long endStationId,
                                   @Param("tableId") Long tableId,
                                   @Param("serviceNo") String serviceNo,
                                   @Param("trainNo")   String trainNo,
                                   @Param("up")  Boolean up);
 
+    List<SbRuntimeItem> findByRouteItemId(@Param("routeItemId") Long routeItemId);
 }

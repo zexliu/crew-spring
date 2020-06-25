@@ -1,18 +1,14 @@
 package wiki.zex.cloud.example.req;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 /**
  * <p>
@@ -27,10 +23,11 @@ import java.time.LocalDateTime;
 @ApiModel(value="SbRouteItem对象", description="交路计划明细表")
 public class SbRouteItemReq  {
 
+    private static final long serialVersionUID = 1L;
+
     @ApiModelProperty(value = "交路表ID")
     @NotNull
     private Long tableId;
-
     @ApiModelProperty(value = "班次ID")
     @NotNull
     private Long shiftId;
@@ -38,33 +35,29 @@ public class SbRouteItemReq  {
     @ApiModelProperty(value = "交路号")
     private String routeItemNo;
 
-    @ApiModelProperty(value = "出勤站点")
+    @ApiModelProperty(value = "出勤站点点")
     @NotNull
     private Long attendanceStationId;
 
     @ApiModelProperty(value = "出勤时间")
     @NotNull
-    private LocalDateTime attendanceAt;
+    private LocalTime attendanceAt;
 
     @ApiModelProperty(value = "接车时间")
     @NotNull
-    private LocalDateTime meetAt;
+    private LocalTime meetAt;
 
     @ApiModelProperty(value = "接车车次")
-    @NotBlank
-    private String meetTrainNo;
+    @NotNull
+    private Long meetRuntimeItemId;
 
-    @ApiModelProperty(value = "接车站点")
+    @ApiModelProperty(value = "接车第点")
     @NotNull
     private Long meetStationId;
 
-    @ApiModelProperty(value = "开行交路")
-    @NotBlank
-    private String trainNumbers;
-
     @ApiModelProperty(value = "退勤车次")
-    @NotBlank
-    private String backTrainNo;
+    @NotNull
+    private Long backRuntimeItemId;
 
     @ApiModelProperty(value = "退勤地点")
     @NotNull
@@ -72,7 +65,11 @@ public class SbRouteItemReq  {
 
     @ApiModelProperty(value = "退勤时间")
     @NotNull
-    private LocalDateTime backAt;
+    private LocalTime backAt;
+
+    @ApiModelProperty(value = "总公里数")
+    @NotNull
+    private Double distance;
 
     @ApiModelProperty(value = "备注")
     @Length(max = 200)
@@ -82,4 +79,7 @@ public class SbRouteItemReq  {
     @Length(max = 200)
     private String description;
 
+
+    @ApiModelProperty(value = "开行交路")
+    private List<Long> runtimeItemIds;
 }

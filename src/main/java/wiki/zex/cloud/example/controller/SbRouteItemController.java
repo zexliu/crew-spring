@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import wiki.zex.cloud.example.entity.SbRouteItem;
 import wiki.zex.cloud.example.req.Pageable;
 import wiki.zex.cloud.example.req.SbRouteItemReq;
+import wiki.zex.cloud.example.resp.SbRouteItemDetailsResp;
+import wiki.zex.cloud.example.resp.SbRouteItemListResp;
 import wiki.zex.cloud.example.resp.SimpleResp;
 import wiki.zex.cloud.example.service.ISbRouteItemService;
 
@@ -33,37 +35,35 @@ public class SbRouteItemController {
     private ISbRouteItemService iSbRouteItemService;
 
     @GetMapping
-    IPage<SbRouteItem> list(Pageable pageable, Long tableId, Long shiftId, String routeItemNo,
-                            Long attendanceStationId, String meetTrainNo, Long meetStationId,
-                            String backTrainNo, Long backStationId) {
-        return iSbRouteItemService.page(pageable.convert(), new LambdaQueryWrapper<SbRouteItem>()
-                .eq(tableId != null, SbRouteItem::getTableId, tableId)
-                .eq(shiftId != null, SbRouteItem::getShiftId, shiftId)
-                .eq(StringUtils.isNotBlank(routeItemNo), SbRouteItem::getRouteItemNo, routeItemNo)
-                .eq(attendanceStationId != null, SbRouteItem::getAttendanceStationId, attendanceStationId)
-                .eq(StringUtils.isNotBlank(meetTrainNo), SbRouteItem::getMeetTrainNo, meetTrainNo)
-                .eq(meetStationId != null, SbRouteItem::getMeetStationId, meetStationId)
-                .eq(StringUtils.isNotBlank(backTrainNo), SbRouteItem::getBackTrainNo, backTrainNo)
-                .eq(backStationId != null, SbRouteItem::getBackStationId, backStationId));
+    IPage<SbRouteItemListResp> list(Pageable pageable, Long tableId, Long shiftId, String routeItemNo,
+                                    Long attendanceStationId, String meetTrainNo, Long meetStationId,
+                                    String backTrainNo, Long backStationId) {
+        return  iSbRouteItemService.list(pageable.convert(),tableId,shiftId,routeItemNo,attendanceStationId,meetTrainNo,meetStationId,backTrainNo,backStationId);
+//        return iSbRouteItemService.page(pageable.convert(), new LambdaQueryWrapper<SbRouteItem>()
+//                .eq(tableId != null, SbRouteItem::getTableId, tableId)
+//                .eq(shiftId != null, SbRouteItem::getShiftId, shiftId)
+//                .eq(StringUtils.isNotBlank(routeItemNo), SbRouteItem::getRouteItemNo, routeItemNo)
+//                .eq(attendanceStationId != null, SbRouteItem::getAttendanceStationId, attendanceStationId)
+////                .eq(StringUtils.isNotBlank(meetTrainNo), SbRouteItem::getMeetTrainNo, meetTrainNo)
+//                .eq(meetStationId != null, SbRouteItem::getMeetStationId, meetStationId)
+////                .eq(StringUtils.isNotBlank(backTrainNo), SbRouteItem::getBackTrainNo, backTrainNo)
+//                .eq(backStationId != null, SbRouteItem::getBackStationId, backStationId));
     }
 
     @GetMapping("/{id}")
-    public SbRouteItem getById(@PathVariable Long id) {
+    public SbRouteItemDetailsResp getById(@PathVariable Long id) {
         return iSbRouteItemService.getDetails(id);
     }
 
     @PostMapping
-    public SbRouteItem create(SbRouteItemReq req) {
+    public SbRouteItem create(@Valid @RequestBody SbRouteItemReq req) {
         return iSbRouteItemService.create(req);
     }
-
 
     @PutMapping("/{id}")
     public SbRouteItem update(@PathVariable Long id, @Valid @RequestBody SbRouteItemReq req) {
         return iSbRouteItemService.update(id, req);
-
     }
-
 
     @DeleteMapping("/{id}")
     public SimpleResp delete(@PathVariable Long id) {

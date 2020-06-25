@@ -29,7 +29,7 @@ public class SbRouteRuntimeRelation implements Serializable {
 
     private Long routeItemId;
 
-    private String runtimeTrainNo;
+    private Long runtimeItemId;
 
 
 }

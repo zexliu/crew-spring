@@ -4,23 +4,107 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SbRouteItem">
-        <id column="id" property="id" />
-        <result column="table_id" property="tableId" />
-        <result column="shift_id" property="shiftId" />
-        <result column="route_item_no" property="routeItemNo" />
-        <result column="attendance_station_id" property="attendanceStationId" />
-        <result column="attendance_at" property="attendanceAt" />
-        <result column="meet_at" property="meetAt" />
-        <result column="meet_train_no" property="meetTrainNo" />
-        <result column="meet_station_id" property="meetStationId" />
-        <result column="train_numbers" property="trainNumbers" />
-        <result column="back_train_no" property="backTrainNo" />
-        <result column="back_station_id" property="backStationId" />
-        <result column="back_at" property="backAt" />
-        <result column="distance" property="distance" />
-        <result column="remark" property="remark" />
-        <result column="description" property="description" />
-        <result column="create_at" property="createAt" />
+        <id column="id" property="id"/>
+        <result column="table_id" property="tableId"/>
+        <result column="shift_id" property="shiftId"/>
+        <result column="route_item_no" property="routeItemNo"/>
+        <result column="attendance_station_id" property="attendanceStationId"/>
+        <result column="attendance_at" property="attendanceAt"/>
+        <result column="meet_at" property="meetAt"/>
+        <result column="meet_runtime_item_id" property="meetRuntimeItemId"/>
+        <result column="meet_station_id" property="meetStationId"/>
+        <result column="back_runtime_item_id" property="backRuntimeItemId"/>
+        <result column="back_station_id" property="backStationId"/>
+        <result column="back_at" property="backAt"/>
+        <result column="distance" property="distance"/>
+        <result column="remark" property="remark"/>
+        <result column="description" property="description"/>
+        <result column="create_at" property="createAt"/>
     </resultMap>
+    <select id="page" resultType="wiki.zex.cloud.example.resp.SbRouteItemListResp">
+        select sri.id,
+        sri.table_id,
+        sri.shift_id,
+        sri.route_item_no,
+        sri.attendance_station_id,
+        sri.attendance_at,
+        sri.meet_at,
+        sri.meet_runtime_item_id,
+        sri.meet_station_id,
+        sri.back_runtime_item_id,
+        sri.back_station_id,
+        sri.back_at,
+        sri.distance,
+        sri.remark,
+        sri.description,
+        sri.create_at,
+        mri.train_no meet_train_no,
+        bri.train_no back_train_no,
+        GROUP_CONCAT(rri.train_no SEPARATOR '--->') train_no_descriptions
+        from sb_route_item sri
+        left join sb_runtime_item mri on mri.id = sri.meet_runtime_item_id
+        left join sb_runtime_item bri on bri.id = sri.back_runtime_item_id
+        left join sb_route_runtime_relation srrr on srrr.route_item_id = sri.id
+        left join sb_runtime_item rri on rri.id = srrr.runtime_item_id
+        <where>
+            1=1
+            <if test="tableId != null">
+                and sri.table_id = #{tableId}
+            </if>
+            <if test="shiftId != null">
+                and sri.shift_id = #{shiftId}
+            </if>
+            <if test="routeItemNo != null">
+                and sri.route_item_no = #{routeItemNo}
+            </if>
+            <if test="attendanceStationId != null">
+                and sri.attendance_station_id = #{attendanceStationId}
+            </if>
+            <if test="meetTrainNo != null and meetTrainNo != ''">
+                and sri.meet_train_no = #{meetTrainNo}
+            </if>
+            <if test="meetStationId != null ">
+                and sri.meet_station_id = #{meetStationId}
+            </if>
+            <if test="backTrainNo != null  and backTrainNo != ''">
+                and sri.back_train_no = #{backTrainNo}
+            </if>
+            <if test="backStationId != null ">
+                and sri.back_station_id = #{backStationId}
+            </if>
+        </where>
+        group by sri.id
+        order by sri.id asc
+    </select>
+    <resultMap id="DetailsResultMap" type="wiki.zex.cloud.example.resp.SbRouteItemDetailsResp" extends="BaseResultMap">
+        <association property="backRuntimeItem" select="wiki.zex.cloud.example.mapper.SbRuntimeItemMapper.selectById"
+                     column="id = back_runtime_item_id"/>
+        <association property="meetRuntimeItem" select="wiki.zex.cloud.example.mapper.SbRuntimeItemMapper.selectById"
+                     column="id = meet_runtime_item_id"/>
+        <collection property="runtimeItems" select="wiki.zex.cloud.example.mapper.SbRuntimeItemMapper.findByRouteItemId"
+                    column="routeItemId = id"/>
+    </resultMap>
+    <select id="getDetails" resultMap="DetailsResultMap">
+        select sri.id,
+               sri.table_id,
+               sri.shift_id,
+               sri.route_item_no,
+               sri.attendance_station_id,
+               sri.attendance_at,
+               sri.meet_at,
+               sri.meet_runtime_item_id,
+               sri.meet_station_id,
+               sri.back_runtime_item_id,
+               sri.back_station_id,
+               sri.back_at,
+               sri.distance,
+               sri.remark,
+               sri.description,
+               sri.create_at,
+               srt.runtime_table_id
+        from sb_route_item sri
+        left join  sb_route_table srt on srt.id = sri.table_id
+        where sri.id = #{id}
+    </select>
 
 </mapper>

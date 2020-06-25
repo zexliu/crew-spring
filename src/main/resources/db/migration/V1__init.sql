@@ -257,14 +257,13 @@ CREATE TABLE `sb_route_item` (
                                  `shift_id` bigint(11) NULL,
                                  `route_item_no` varchar(30) NULL COMMENT '交路号',
                                  `attendance_station_id` bigint(11) NULL COMMENT '出勤站点点',
-                                 `attendance_at` datetime NULL COMMENT '出勤时间',
-                                 `meet_at` datetime NULL COMMENT '接车时间',
-                                 `meet_train_no` varchar(30) NULL COMMENT '接车车次',
+                                 `attendance_at` time NULL COMMENT '出勤时间',
+                                 `meet_at` time NULL COMMENT '接车时间',
+                                 `meet_runtime_item_id` bigint(11) NULL COMMENT '接车车次',
                                  `meet_station_id` bigint(11) NULL COMMENT '接车第点',
-                                 `train_numbers` varchar(255) NULL COMMENT '开行交路',
-                                 `back_train_no` varchar(30) NULL COMMENT '退勤车次',
+                                 `back_runtime_item_id` bigint(11) NULL COMMENT '退勤车次',
                                  `back_station_id` bigint(11) NULL COMMENT '退勤地点',
-                                 `back_at` datetime NULL COMMENT '退勤时间',
+                                 `back_at` time NULL COMMENT '退勤时间',
                                  `distance` double(10,2) NULL COMMENT '总公里数',
                                  `remark` varchar(200) NULL COMMENT '备注',
                                  `description` varchar(200) NULL COMMENT '描述',
@@ -286,9 +285,9 @@ CREATE TABLE `sb_route_table` (
 CREATE TABLE `sb_route_runtime_relation` (
                                              `id` bigint(11) NOT NULL,
                                              `route_item_id` bigint(11) NULL,
-                                             `runtime_train_no` varchar(32) NULL,
+                                             `runtime_item_id` bigint(11) NULL,
                                              PRIMARY KEY (`id`) ,
-                                             UNIQUE INDEX `uk_route_item_id_runtime_item_id` (`route_item_id` ASC, `runtime_train_no` ASC) USING HASH
+                                             UNIQUE INDEX `uk_route_item_id_runtime_item_id` (`route_item_id` ASC, `runtime_item_id` ASC) USING HASH
 )
     COMMENT = '交路明细时刻明细关联关系';
 CREATE TABLE `sb_shift_group` (
