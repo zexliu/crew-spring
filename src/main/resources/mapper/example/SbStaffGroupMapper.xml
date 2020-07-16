@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SbStaffGroupMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SbStaffGroup">
+        <id column="id" property="id"/>
+        <result column="team_id" property="teamId"/>
+        <result column="group_name" property="groupName"/>
+        <result column="description" property="description"/>
+        <result column="create_at" property="createAt"/>
+        <result column="rotate_count" property="rotateCount"/>
+    </resultMap>
+    <select id="page" resultType="wiki.zex.cloud.example.resp.SbStaffGroupListResp">
+        select ssg.id,
+        ssg.team_id,
+        ssg.group_name,
+        ssg.description,
+        ssg.create_at,
+        ssg.rotate_count,
+        GROUP_CONCAT(su.real_name SEPARATOR ' | ') leader_descriptions
+        from sb_staff_group ssg
+        left join sb_staff ss on ss.group_id = ssg.id and is_group_leader
+        left join sy_user su on ss.user_id = su.id
+        <where>
+            1=1
+            <if test="teamId != null">
+                and ssg.team_id = #{teamId}
+            </if>
+            <if test="groupName != null">
+                and ssg.group_name like CONCAT('%',#{groupName},'%')
+            </if>
+
+        </where>
+        group by ssg.id
+    </select>
+    <resultMap id="Details" type="wiki.zex.cloud.example.resp.SbStaffGroupResp">
+        <collection property="leaderIds" select="wiki.zex.cloud.example.mapper.SbStaffMapper.selectLeaderByGroupId"
+                    column="groupId = id"/>
+    </resultMap>
+    <select id="getDetails" resultMap="Details">
+        select id, team_id, group_name, description, create_at, rotate_count
+        from sb_staff_group ssg
+        where id = #{id}
+    </select>
+</mapper>

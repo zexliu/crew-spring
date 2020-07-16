@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import wiki.zex.cloud.example.req.SbRuntimeItemReq;
 import wiki.zex.cloud.example.resp.SbRuntimeItemResp;
 
+import java.util.List;
+
 /**
  * <p>
  * 时刻表数据项 服务类
@@ -24,4 +26,8 @@ public interface ISbRuntimeItemService extends IService<SbRuntimeItem> {
     SbRuntimeItem update(Long id, SbRuntimeItemReq req);
 
     IPage<SbRuntimeItemResp> page(Page<SbRuntimeItemResp> convert, Long startStationId, Long endStationId, Long tableId, String serviceNo, String trainNo, Boolean up);
+
+    SbRuntimeItem getByTrainNo(Long tableId, String s);
+
+    List<Long> getRuntimeIdsByTrainNos(List<String> trainNos);
 }

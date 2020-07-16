@@ -8,6 +8,9 @@ import wiki.zex.cloud.example.req.SbRouteItemReq;
 import wiki.zex.cloud.example.resp.SbRouteItemDetailsResp;
 import wiki.zex.cloud.example.resp.SbRouteItemListResp;
 
+import java.time.LocalDate;
+import java.util.List;
+
 /**
  * <p>
  * 交路计划明细表 服务类
@@ -29,4 +32,8 @@ public interface ISbRouteItemService extends IService<SbRouteItem> {
     SbRouteItemDetailsResp getDetails(Long id);
 
    IPage<SbRouteItemListResp> list(Page<SbRouteItemListResp> page, Long tableId, Long shiftId, String routeItemNo, Long attendanceStationId, String meetTrainNo, Long meetStationId, String backTrainNo, Long backStationId);
+
+
+    List<SbRouteItem> listByDateAndShiftGroupId(LocalDate curDate, Long shiftGroupId);
+
 }

@@ -70,4 +70,9 @@ public class SbRouteItemController {
         iSbRouteItemService.delete(id);
         return SimpleResp.SUCCESS;
     }
+
+    @PostMapping("gen")
+    public SimpleResp generate(){
+        return  SimpleResp.SUCCESS;
+    }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SbStaffTeamSchedulingMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SbStaffTeamScheduling">
+        <id column="id" property="id" />
+        <result column="date" property="date" />
+        <result column="shift_group_id" property="shiftGroupId" />
+        <result column="staff_team_id" property="staffTeamId" />
+    </resultMap>
+
+</mapper>

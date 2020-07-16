@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SbStaffAttendanceMapper">
+
+
+    <select id="list" resultType="wiki.zex.cloud.example.resp.SbStaffAttendanceResp">
+        select ssa.id,
+        ssa.staff_id,
+        ssa.route_item_id,
+        ssa.route_item_no,
+        ssa.date,
+        ssa.distance,
+        ssa.duration,
+        ssa.attendance_at,
+        ssa.back_at,
+        ssa.real_attendance_at,
+        ssa.real_back_at,
+        ssa.answer_accuracy,
+        ssa.alcohol_value,
+        ssa.alcohol_result,
+        ssa.attendance_device_id,
+        ssa.back_device_id,
+        ssa.attendance_status,
+        ssa.back_status,
+        ssa.staff_team_id,
+        ssa.staff_group_id,
+        su.real_name,
+        su.avatar
+        from sb_staff_attendance ssa
+        left join sb_staff ss on ssa.staff_id = ss.id
+        left join sy_user su on ss.user_id = su.id
+        <where>
+            1=1
+            <if test="date != null">
+                and ssa.date = #{date}
+            </if>
+            <if test="alcoholResult != null">
+                and ssa.alcohol_result = #{alcoholResult}
+            </if>
+            <if test="answerStatus != null and answerStatus == 1">
+                and ssa.answer_accuracy >= 80
+            </if>
+            <if test="answerStatus != null and answerStatus == 2">
+                and ssa.answer_accuracy <![CDATA[ < ]]> 80
+            </if>
+            <if test="attendanceStatus != null">
+                and ssa.attendance_status = #{attendanceStatus}
+            </if>
+            <if test="backStatus != null">
+                and ssa.back_status = #{backStatus}
+            </if>
+            <if test="staffId != null">
+                and ssa.staff_id = #{staffId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

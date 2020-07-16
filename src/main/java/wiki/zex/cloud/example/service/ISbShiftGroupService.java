@@ -20,4 +20,5 @@ public interface ISbShiftGroupService extends IService<SbShiftGroup> {
 
     void delete(Long id);
 
+    SbShiftGroup getByName(String groupName);
 }

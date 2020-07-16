@@ -55,7 +55,7 @@
                 and su.work_no like CONCAT('%',#{workNo},'%')
             </if>
             <if test="realName != null">
-                and su.real_name = realName
+                and su.real_name like CONCAT('%',#{realName},'%')
             </if>
             <if test="enable != null">
                 and su.enable = #{enable}

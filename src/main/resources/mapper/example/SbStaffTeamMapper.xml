@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SbStaffTeamMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SbStaffTeam">
+        <id column="id" property="id"/>
+        <result column="team_name" property="teamName"/>
+        <result column="team_phone" property="teamPhone"/>
+        <result column="rotate_count" property="rotateCount"/>
+        <result column="rotate_status" property="rotateStatus"/>
+        <result column="group_type" property="groupType"/>
+        <result column="create_at" property="createAt"/>
+        <result column="description" property="description"/>
+    </resultMap>
+    <select id="list" resultType="wiki.zex.cloud.example.resp.SbStaffTeamListResp">
+        select sst.id,
+        sst.team_name,
+        sst.team_phone,
+        sst.rotate_count,
+        sst.rotate_status,
+        sst.group_type,
+        sst.create_at,
+        sst.description,
+        GROUP_CONCAT(su.real_name SEPARATOR ' | ') leader_descriptions
+        from sb_staff_team sst
+        left join sb_staff ss on ss.team_id = sst.id and is_team_leader
+        left join sy_user su on ss.user_id = su.id
+        <where>
+            1=1
+            <if test="teamName != null">
+                and sst.team_name like CONCAT('%',#{teamName},'%')
+            </if>
+        </where>
+        group by sst.id
+    </select>
+    <resultMap id="Details" type="wiki.zex.cloud.example.resp.SbStaffTeamResp">
+        <collection property="leaderIds" select="wiki.zex.cloud.example.mapper.SbStaffMapper.selectLeaderByTeamId" column="teamId = id"/>
+    </resultMap>
+    <select id="getDetails" resultMap="Details">
+        select sst.id,
+               sst.team_name,
+               sst.team_phone,
+               sst.rotate_count,
+               sst.rotate_status,
+               sst.group_type,
+               sst.create_at,
+               sst.description
+        from sb_staff_team sst
+        where id = #{id}
+    </select>
+
+</mapper>

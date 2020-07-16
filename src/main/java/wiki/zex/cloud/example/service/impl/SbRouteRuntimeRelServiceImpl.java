@@ -2,9 +2,9 @@ package wiki.zex.cloud.example.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.collections4.CollectionUtils;
-import wiki.zex.cloud.example.entity.SbRouteRuntimeRelation;
-import wiki.zex.cloud.example.mapper.SbRouteRuntimeRelationMapper;
-import wiki.zex.cloud.example.service.ISbRouteRuntimeRelationService;
+import wiki.zex.cloud.example.entity.SbRouteRuntimeRel;
+import wiki.zex.cloud.example.mapper.SbRouteRuntimeRelMapper;
+import wiki.zex.cloud.example.service.ISbRouteRuntimeRelService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
  * @since 2020-06-22
  */
 @Service
-public class SbRouteRuntimeRelationServiceImpl extends ServiceImpl<SbRouteRuntimeRelationMapper, SbRouteRuntimeRelation> implements ISbRouteRuntimeRelationService {
+public class SbRouteRuntimeRelServiceImpl extends ServiceImpl<SbRouteRuntimeRelMapper, SbRouteRuntimeRel> implements ISbRouteRuntimeRelService {
 
     @Override
     public void updateRelations(Long id, List<Long> runtimeItemIds) {
         removeByRouteItemId(id);
         if (CollectionUtils.isNotEmpty(runtimeItemIds)) {
-            List<SbRouteRuntimeRelation> collect = runtimeItemIds.stream().map(aLong -> {
-                SbRouteRuntimeRelation relation = new SbRouteRuntimeRelation();
+            List<SbRouteRuntimeRel> collect = runtimeItemIds.stream().map(aLong -> {
+                SbRouteRuntimeRel relation = new SbRouteRuntimeRel();
                 relation.setRouteItemId(id);
                 relation.setRuntimeItemId(aLong);
                 return relation;
@@ -40,7 +40,7 @@ public class SbRouteRuntimeRelationServiceImpl extends ServiceImpl<SbRouteRuntim
 
     @Override
     public void removeByRouteItemId(Long id) {
-        remove(new LambdaQueryWrapper<SbRouteRuntimeRelation>()
-                .eq(SbRouteRuntimeRelation::getRouteItemId, id));
+        remove(new LambdaQueryWrapper<SbRouteRuntimeRel>()
+                .eq(SbRouteRuntimeRel::getRouteItemId, id));
     }
 }

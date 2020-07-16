@@ -20,4 +20,6 @@ public interface ISbRouteTableService extends IService<SbRouteTable> {
 
     void delete(Long id);
 
+    void updateEnable(Long id);
+
 }

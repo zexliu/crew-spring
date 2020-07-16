@@ -1,6 +1,6 @@
 package wiki.zex.cloud.example.service;
 
-import wiki.zex.cloud.example.entity.SbRouteRuntimeRelation;
+import wiki.zex.cloud.example.entity.SbRouteRuntimeRel;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author Zex
  * @since 2020-06-22
  */
-public interface ISbRouteRuntimeRelationService extends IService<SbRouteRuntimeRelation> {
+public interface ISbRouteRuntimeRelService extends IService<SbRouteRuntimeRel> {
 
     void updateRelations(Long id, List<Long> runtimeItemIds);
 

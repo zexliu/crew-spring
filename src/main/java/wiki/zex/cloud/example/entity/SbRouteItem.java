@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import wiki.zex.cloud.example.config.serializers.JsonLongSerializer;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -36,6 +37,9 @@ public class SbRouteItem implements Serializable {
     @ApiModelProperty(value = "交路表ID")
     @JsonSerialize(using = JsonLongSerializer.class)
     private Long tableId;
+    @ApiModelProperty(value = "班次ID")
+    @NotNull
+    private Long shiftGroupId;
 
     @ApiModelProperty(value = "班次")
     @JsonSerialize(using = JsonLongSerializer.class)

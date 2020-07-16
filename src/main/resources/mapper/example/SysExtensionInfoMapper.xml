@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SysExtensionInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SysExtensionInfo">
+        <id column="id" property="id" />
+        <result column="field_code" property="fieldCode" />
+        <result column="instance_id" property="instanceId" />
+        <result column="long_value" property="longValue" />
+        <result column="double_value" property="doubleValue" />
+        <result column="text_value" property="textValue" />
+    </resultMap>
+    <select id="findByInstanceId" resultType="wiki.zex.cloud.example.entity.SysExtensionInfo">
+        select id, field_code, instance_id, long_value, double_value, text_value from   sys_extension_info
+        where instance_id = #{instanceId}
+    </select>
+
+</mapper>

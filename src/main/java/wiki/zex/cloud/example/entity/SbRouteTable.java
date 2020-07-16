@@ -42,8 +42,10 @@ public class SbRouteTable implements Serializable {
 
     @ApiModelProperty(value = "描述")
     private String description;
+
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createAt;
 
-
+    @ApiModelProperty(value = "启用状态")
+    private Boolean enable;
 }

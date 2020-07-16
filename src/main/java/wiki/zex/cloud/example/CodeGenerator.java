@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.Scanner;
 import static com.baomidou.mybatisplus.annotation.IdType.ASSIGN_ID;
 
 // 演示例子，执行 main 方法控制台输入模块表名回车自动生成对应项目目录中
+@Slf4j
 public class CodeGenerator {
 
     public static final String DATA_SOURCE_URL = "jdbc:mysql://localhost:3306/crew?useUnicode=true&useSSL=false&characterEncoding=utf8";

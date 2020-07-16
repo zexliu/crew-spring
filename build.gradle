@@ -33,6 +33,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 //    implementation 'org.springframework.cloud:spring-cloud-starter-security'
     implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
 
@@ -77,6 +78,11 @@ dependencies {
     implementation 'io.swagger:swagger-annotations:1.6.0'
     implementation 'io.swagger:swagger-models:1.6.0'
     implementation 'com.github.xiaoymin:swagger-bootstrap-ui:1.9.6'
+
+    //webService
+    implementation 'org.apache.cxf:cxf-rt-transports-http:3.3.7'
+    implementation 'org.apache.cxf:cxf-rt-frontend-jaxws:3.3.7'
+
 }
 
 dependencyManagement {

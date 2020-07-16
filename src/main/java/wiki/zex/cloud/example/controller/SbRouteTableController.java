@@ -51,9 +51,19 @@ public class SbRouteTableController {
         return iSbRouteTableService.update(id, req);
     }
 
+
+    @PutMapping("/{id}/enable")
+    public SimpleResp updateEnable(@PathVariable Long id) {
+         iSbRouteTableService.updateEnable(id);
+        return SimpleResp.SUCCESS;
+    }
+
     @DeleteMapping("/{id}")
     public SimpleResp update(@PathVariable Long id) {
         iSbRouteTableService.delete(id);
         return SimpleResp.SUCCESS;
     }
+
+
+
 }

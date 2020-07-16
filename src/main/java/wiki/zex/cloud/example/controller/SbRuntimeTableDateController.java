@@ -1,6 +1,5 @@
 package wiki.zex.cloud.example.controller;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
@@ -38,14 +37,11 @@ public class SbRuntimeTableDateController {
     public IPage<SbRuntimeTableDate> list(Pageable pageable, @RequestParam String month) {
         TemporalAccessor temporalAccessor = DateTimeFormatter.ofPattern("yyyy-MM").parse(month);
         LocalDate date = LocalDate.of(temporalAccessor.get(ChronoField.YEAR),temporalAccessor.get(ChronoField.MONTH_OF_YEAR),1);
-
         return iSbRuntimeTableDateService.page(pageable.convert(),
                 new LambdaQueryWrapper<SbRuntimeTableDate>()
                         .between(SbRuntimeTableDate::getDate,date.minusDays(6),date.plusDays(44))
                         .orderByAsc(SbRuntimeTableDate::getDate));
     }
-
-
     @PostMapping("/gen")
     public SimpleResp generate(@Valid @RequestBody RuntimeTableDateGenerateReq req) {
         iSbRuntimeTableDateService.generate(req);

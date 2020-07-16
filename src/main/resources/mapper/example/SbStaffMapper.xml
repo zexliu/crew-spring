@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SbStaffMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SbStaff">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="fingerprint" property="fingerprint"/>
+        <result column="skills" property="skills"/>
+        <result column="safe_at" property="safeAt"/>
+        <result column="create_at" property="createAt"/>
+        <result column="team_id" property="teamId"/>
+        <result column="group_id" property="groupId"/>
+        <result column="is_team_leader" property="isTeamLeader"/>
+        <result column="is_group_leader" property="isGroupLeader"/>
+        <result column="job_title" property="jobTitle"/>
+    </resultMap>
+    <select id="selectLeaderByTeamId" resultType="java.lang.Long">
+        select id
+        from sb_staff ss
+        where ss.is_team_leader
+          and ss.team_id = #{teamId}
+    </select>
+
+    <select id="selectLeaderByGroupId" resultType="java.lang.Long">
+        select id
+        from sb_staff ss
+        where ss.is_group_leader
+          and ss.group_id = #{groupId}
+    </select>
+    <select id="list" resultType="wiki.zex.cloud.example.resp.SbStaffResp">
+        select ss.id,
+        ss.user_id,
+        ss.fingerprint,
+        ss.skills,
+        ss.safe_at,
+        ss.create_at,
+        ss.team_id,
+        ss.group_id,
+        ss.is_team_leader,
+        ss.is_group_leader,
+        ss.job_title,
+        su.mobile,
+        su.email,
+        su.real_name,
+        su.avatar,
+        su.work_no,
+        su.gender,
+        su.birth_day
+        from sb_staff ss
+        left join sy_user su on ss.user_id = su.id
+        <where>
+            1=1
+            <if test="groupId != null">
+                and ss.group_id = #{groupId}
+            </if>
+            <if test="teamId != null">
+                and ss.team_id = #{teamId}
+            </if>
+            <if test="jobTitle != null">
+                and ss.job_title = #{jobTitle}
+            </if>
+            <if test="mobile != null and mobile != '' ">
+                and ss.mobile like CONCAT('%',#{mobile},'%')
+            </if>
+            <if test="workNo != null and workNo != '' ">
+                and ss.work_no like CONCAT('%',#{workNo},'%')
+            </if>
+            <if test="realName != null and realName != '' ">
+                and su.real_name like CONCAT('%',#{realName},'%')
+            </if>
+        </where>
+
+    </select>
+
+    <resultMap id="DetailsResultMap" type="wiki.zex.cloud.example.resp.SbStaffDetailsResp" extends="BaseResultMap">
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="real_name" property="realName"/>
+        <result column="avatar" property="avatar"/>
+        <result column="work_no" property="workNo"/>
+        <result column="gender" property="gender"/>
+        <result column="birth_day" property="birthDay"/>
+        <collection property="extensions" select="wiki.zex.cloud.example.mapper.SysExtensionInfoMapper.findByInstanceId"
+                    column="instanceId = id"/>
+    </resultMap>
+
+    <select id="getDetailsById" resultMap="DetailsResultMap">
+
+        select ss.id,
+               ss.user_id,
+               ss.fingerprint,
+               ss.skills,
+               ss.safe_at,
+               ss.create_at,
+               ss.team_id,
+               ss.group_id,
+               ss.is_team_leader,
+               ss.is_group_leader,
+               ss.job_title,
+               su.mobile,
+               su.email,
+               su.real_name,
+               su.avatar,
+               su.work_no,
+               su.gender,
+               su.birth_day
+        from sb_staff ss
+                 left join sy_user su on ss.user_id = su.id
+        where ss.id = #{id}
+    </select>
+
+
+    <select id="scheduling" resultType="java.util.Map">
+        SELECT cast(ss.id as char ) as id ,
+        su.real_name ,
+        cast(ss.team_id as char) as team_id ,
+        cast(ss.group_id as char) as group_id , ${sql}
+        FROM sb_staff ss
+
+        LEFT JOIN sy_user su on su.id = ss.user_id
+
+        LEFT JOIN sb_staff_group_scheduling ssgs on ssgs.staff_group_id = ss.group_id and ssgs.date >= #{startAt} AND
+        ssgs.date <![CDATA[<=]]> #{endAt}
+        LEFT JOIN sb_route_item sri on sri.id = ssgs.route_item_id
+        <where>
+            1=1
+            <if test="teamId != null">
+                and ss.team_id = #{teamId}
+            </if>
+            <if test="groupId != null">
+                and ss.group_id = #{groupId}
+            </if>
+        </where>
+        GROUP BY ss.id
+    </select>
+    <resultMap id="DayResult" type="wiki.zex.cloud.example.resp.SbStaffSchedulingDayResp">
+        <collection property="staffs" select="list" column="{groupId = staff_group_id ,teamId = staff_team_id}"/>
+    </resultMap>
+    <select id="day" resultMap="DayResult">
+        SELECT
+        sri.id route_item_id,
+        sri.route_item_no,
+        sri.shift_id,
+        sri.attendance_at,
+        sri.back_at,
+        sri.shift_group_id,
+        sri.distance,
+        srtd.date,
+        stts.staff_team_id,
+        ssgs.staff_group_id
+        FROM
+        sb_route_item sri
+        LEFT JOIN sb_route_table srt ON srt.id = sri.table_id
+        LEFT JOIN sb_runtime_table_date srtd ON srtd.table_id = srt.runtime_table_id
+        LEFT JOIN sb_staff_team_scheduling stts ON stts.date = srtd.date AND stts.shift_group_id = sri.shift_group_id
+        LEFT JOIN sb_staff_group_scheduling ssgs ON ssgs.date = srtd.date AND ssgs.route_item_id = sri.id
+        <where>
+            srtd.date = #{date}
+            <if test="shiftId != null">
+                and sri.shift_id = #{shiftId}
+            </if>
+            <if test="shiftGroupId != null">
+                and sri.shift_group_id = #{shiftGroupId}
+            </if>
+            <if test="staffTeamId != null">
+                and stts.staff_team_id = #{staffTeamId}
+            </if>
+            <if test="staffGroupId != null">
+                and ssgs.staff_group_id = #{staffGroupId}
+            </if>
+            <if test="routeItemNo != null and routeItemNo != '' ">
+                and sri.route_item_no like CONCAT('%',#{routeItemNo},'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

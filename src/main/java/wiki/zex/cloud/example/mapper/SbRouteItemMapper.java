@@ -8,6 +8,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import wiki.zex.cloud.example.resp.SbRouteItemDetailsResp;
 import wiki.zex.cloud.example.resp.SbRouteItemListResp;
 
+import java.time.LocalDate;
+import java.util.List;
+
 /**
  * <p>
  * 交路计划明细表 Mapper 接口
@@ -30,4 +33,7 @@ public interface SbRouteItemMapper extends BaseMapper<SbRouteItem> {
 
 
     SbRouteItemDetailsResp getDetails(@Param("id")Long id);
+
+
+    List<SbRouteItem> listByDateAndShiftGroupId(@Param("date")LocalDate curDate,@Param("shiftGroupId") Long shiftGroupId);
 }

@@ -106,5 +106,28 @@
         left join  sb_route_table srt on srt.id = sri.table_id
         where sri.id = #{id}
     </select>
+    <select id="listByDateAndShiftGroupId" resultType="wiki.zex.cloud.example.entity.SbRouteItem">
+        SELECT sri.id,
+               sri.table_id,
+               sri.shift_group_id,
+               sri.shift_id,
+               sri.route_item_no,
+               sri.attendance_station_id,
+               sri.attendance_at,
+               sri.meet_at,
+               sri.meet_runtime_item_id,
+               sri.meet_station_id,
+               sri.back_runtime_item_id,
+               sri.back_station_id,
+               sri.back_at,
+               sri.distance,
+               sri.remark,
+               sri.description,
+               sri.create_at
+        FROM sb_route_item  sri
+                          LEFT JOIN sb_route_table srt on srt.id =  sri.table_id and srt.enable
+                          LEFT JOIN sb_runtime_table_date srtd on srtd.table_id = srt.runtime_table_id
+        WHERE srtd.date = #{date} and sri.shift_group_id = #{shiftGroupId}
+    </select>
 
 </mapper>

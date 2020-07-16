@@ -1,8 +1,10 @@
 package wiki.zex.cloud.example.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import wiki.zex.cloud.example.entity.SbShiftGroup;
+import wiki.zex.cloud.example.exception.ParameterException;
 import wiki.zex.cloud.example.mapper.SbShiftGroupMapper;
 import wiki.zex.cloud.example.req.SbShiftGroupReq;
 import wiki.zex.cloud.example.service.ISbShiftGroupService;
@@ -44,5 +46,14 @@ public class SbShiftGroupServiceImpl extends ServiceImpl<SbShiftGroupMapper, SbS
     public void delete(Long id) {
         iSbShiftService.removeByGroupId(id);
         removeById(id);
+    }
+
+    @Override
+    public SbShiftGroup getByName(String groupName) {
+        SbShiftGroup group = getOne(new LambdaQueryWrapper<SbShiftGroup>().eq(SbShiftGroup::getGroupName, groupName));
+        if (group == null){
+            throw new ParameterException("班次组不存在");
+        }
+        return group;
     }
 }

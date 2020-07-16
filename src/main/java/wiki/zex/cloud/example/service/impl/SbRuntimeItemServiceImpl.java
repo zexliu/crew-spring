@@ -33,11 +33,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -83,6 +80,36 @@ public class SbRuntimeItemServiceImpl extends ServiceImpl<SbRuntimeItemMapper, S
     @Override
     public IPage<SbRuntimeItemResp> page(Page<SbRuntimeItemResp> page, Long startStationId, Long endStationId, Long tableId, String serviceNo, String trainNo, Boolean up) {
         return baseMapper.page(page, startStationId, endStationId, tableId, serviceNo, trainNo, up);
+    }
+
+    @Override
+    public SbRuntimeItem getByTrainNo(Long tableId, String s) {
+        SbRuntimeItem sbRuntimeItem = getOne(new LambdaQueryWrapper<SbRuntimeItem>().eq(SbRuntimeItem::getTableId,tableId).eq(SbRuntimeItem::getTrainNo, s));
+        if (sbRuntimeItem == null) {
+
+            // TODO: 2020/7/8 交路不存在判断
+            sbRuntimeItem = new SbRuntimeItem();
+            sbRuntimeItem.setId(1L);
+//            throw new ParameterException("车次不存在 " + s);
+        }
+
+        return sbRuntimeItem;
+    }
+
+    @Override
+    public List<Long> getRuntimeIdsByTrainNos(List<String> trainNos) {
+
+
+        List<SbRuntimeItem> items = list(new LambdaQueryWrapper<SbRuntimeItem>().in(SbRuntimeItem::getTrainNo, trainNos).orderByAsc(SbRuntimeItem::getStartAt));
+//          TODO: 2020/7/8 判断交路
+//        List<String>itemsStr = items.stream().map(SbRuntimeItem::getTrainNo).collect(Collectors.toList());
+//        trainNos.forEach(s -> {
+//           if (!itemsStr.contains(s)){
+//               throw new ParameterException("交路不存在 "+ s);
+//           }
+//        });
+        return items.stream().map(SbRuntimeItem::getId).collect(Collectors.toList());
+
     }
 
     @Override

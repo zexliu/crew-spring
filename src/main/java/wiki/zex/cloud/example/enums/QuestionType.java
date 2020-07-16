@@ -9,7 +9,7 @@ public enum QuestionType implements IEnum<Integer> {
     QuestionType(int code) {
         this.value = code;
     }
-    private int value;
+    private final int value;
 
     @Override
     public Integer getValue() {

@@ -1,5 +1,6 @@
 package wiki.zex.cloud.example.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import wiki.zex.cloud.example.entity.SbRouteTable;
@@ -50,5 +51,14 @@ public class SbRouteTableServiceImpl extends ServiceImpl<SbRouteTableMapper, SbR
         iSbRouteItemService.removeByTableId(id);
         iSbRouteTableService.removeById(id);
 
+    }
+
+    @Override
+    public void updateEnable(Long id) {
+        SbRouteTable routeTable = getById(id);
+        update(new LambdaUpdateWrapper<SbRouteTable>().set(SbRouteTable::getEnable,false)
+                .eq(SbRouteTable::getRuntimeTableId,routeTable.getRuntimeTableId()));
+        routeTable.setEnable(true);
+        updateById(routeTable);
     }
 }

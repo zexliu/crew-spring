@@ -1,6 +1,6 @@
 package wiki.zex.cloud.example.mapper;
 
-import wiki.zex.cloud.example.entity.SbRouteRuntimeRelation;
+import wiki.zex.cloud.example.entity.SbRouteRuntimeRel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author Zex
  * @since 2020-06-22
  */
-public interface SbRouteRuntimeRelationMapper extends BaseMapper<SbRouteRuntimeRelation> {
+public interface SbRouteRuntimeRelMapper extends BaseMapper<SbRouteRuntimeRel> {
 
 }

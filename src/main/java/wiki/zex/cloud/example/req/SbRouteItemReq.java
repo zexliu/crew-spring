@@ -28,6 +28,11 @@ public class SbRouteItemReq  {
     @ApiModelProperty(value = "交路表ID")
     @NotNull
     private Long tableId;
+
+    @ApiModelProperty(value = "班次ID")
+    @NotNull
+    private Long shiftGroupId;
+
     @ApiModelProperty(value = "班次ID")
     @NotNull
     private Long shiftId;

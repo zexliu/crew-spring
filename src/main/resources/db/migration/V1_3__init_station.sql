@@ -28,4 +28,4 @@ INSERT INTO `sb_station`(`id`, `station_name`, `station_code`,  `next_station_di
 INSERT INTO `sb_station`(`id`, `station_name`, `station_code`,  `next_station_distance`, `seq`, `description`) VALUES (1271278662861615106, '凤城十二路', 'G2621/G2620', 12, 0, '');
 INSERT INTO `sb_station`(`id`, `station_name`, `station_code`,  `next_station_distance`, `seq`, `description`) VALUES (1271278737759301634, '元朔路', 'G2903/G2904', 6, 0, '');
 INSERT INTO `sb_station`(`id`, `station_name`, `station_code`,  `next_station_distance`, `seq`, `description`) VALUES (1271278806331977730, '草滩停车场', 'ZHG3/ZHG4', 5, 0, '');
-INSERT INTO `sb_station`(`id`, `station_name`, `station_code`,  `next_station_distance`, `seq`, `description`) VALUES (1271278891908362242, '北客站(北广场)', 'G2913/G2918', 2, 0, '起始站');
+INSERT INTO `sb_station`(`id`, `station_name`, `station_code`,  `next_station_distance`, `seq`, `description`) VALUES (1271278891908362242, '北客站 (北广场)', 'G2913/G2918', 2, 0, '起始站');

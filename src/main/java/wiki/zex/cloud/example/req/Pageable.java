@@ -15,7 +15,7 @@ public class Pageable {
     @ApiModelProperty("是否查询数量")
     Boolean isSearchCount = true;
 
-    public Pageable(Integer size, Integer current, Boolean isSearchCount) {
+    public Pageable( Integer current, Integer size, Boolean isSearchCount) {
         if (current != null && current > 1) {
             this.current = current;
         }

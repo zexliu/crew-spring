@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SnNotificationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SnNotification">
+        <id column="id" property="id"/>
+        <result column="params" property="params"/>
+        <result column="channel_type" property="channelType"/>
+        <result column="content" property="content"/>
+        <result column="create_at" property="createAt"/>
+        <result column="read_status" property="readStatus"/>
+    </resultMap>
+    <select id="list" resultType="wiki.zex.cloud.example.entity.SnNotification">
+
+        select sn.id,
+        sn.title,
+        sn.content,
+        sn.params,
+        sn.channel_type,
+        sn.create_at,
+        sn.publish_type,
+        sn.read_status
+        from sn_notification sn
+        left join sn_notification_user_rel snur on snur.notification_id = sn.id
+        <where>
+            1=1
+            <if test="userId != null">
+                and snur.user_id = #{userId} or sn.publish_type = 1
+            </if>
+            <if test="channelType != null">
+                and sn.channle_type = #{channelType}
+            </if>
+            <if test="keywords != null and keywords != '' ">
+                and sn.title like CONCAT('%',#{keywords},'%')
+            </if>
+        </where>
+
+    </select>
+
+    <resultMap id="DetailMap" type="wiki.zex.cloud.example.resp.SnNotificationDetail">
+        <collection property="users" select="wiki.zex.cloud.example.mapper.SnNotificationUserRelMapper.selectUsersByNotificationId"
+                    column="notificationId = id"/>
+    </resultMap>
+    <select id="getDetailsById" resultMap="DetailMap">
+        select sn.id,
+               sn.title,
+               sn.content,
+               sn.params,
+               sn.channel_type,
+               sn.create_at,
+               sn.publish_type,
+               sn.read_status
+        from sn_notification sn
+        where sn.id = #{id}
+    </select>
+
+</mapper>
+
+
+
+

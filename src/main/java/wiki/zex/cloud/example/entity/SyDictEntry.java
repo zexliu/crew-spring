@@ -38,7 +38,7 @@ public class SyDictEntry implements Serializable {
     @ApiModelProperty(value = "字典项名称")
     private String dictEntryName;
 
-    @ApiModelProperty(value = "字典项名称")
+    @ApiModelProperty(value = "字典项值")
     private String dictEntryValue;
 
     @ApiModelProperty(value = "描述")

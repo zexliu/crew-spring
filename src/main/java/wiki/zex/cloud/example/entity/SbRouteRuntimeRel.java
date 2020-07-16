@@ -19,8 +19,8 @@ import lombok.experimental.Accessors;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="SbRouteRuntimeRelation对象", description="交路明细时刻明细关联关系")
-public class SbRouteRuntimeRelation implements Serializable {
+@ApiModel(value="SbRouteRuntimeRel对象", description="交路明细时刻明细关联关系")
+public class SbRouteRuntimeRel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

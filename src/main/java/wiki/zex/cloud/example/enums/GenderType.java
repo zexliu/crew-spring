@@ -11,7 +11,7 @@ public enum  GenderType implements IEnum<Integer> {
     GenderType(int code) {
         this.value = code;
     }
-    private int value;
+    private final int value;
 
     @Override
     public Integer getValue() {

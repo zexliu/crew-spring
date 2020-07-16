@@ -14,7 +14,7 @@ public enum HttpMethodType implements IEnum<Integer> {
         this.value = code;
     }
 
-    private int value;
+    private final int value;
 
     @Override
     public Integer getValue() {
