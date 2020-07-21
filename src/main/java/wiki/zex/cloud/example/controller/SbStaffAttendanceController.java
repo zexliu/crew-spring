@@ -33,6 +33,10 @@ public class SbStaffAttendanceController {
     public IPage<SbStaffAttendanceResp> list(Pageable pageable, Long staffId, Integer alcoholResult , Integer attendanceStatus, Integer backStatus , Integer answerStatus , LocalDate date) {
         return iSbStaffAttendanceService.list(pageable.convert(),staffId,alcoholResult,attendanceStatus,backStatus,answerStatus,date);
     }
+    @GetMapping("/led")
+    public IPage<SbStaffAttendanceResp> led(Pageable pageable) {
+        return iSbStaffAttendanceService.led(pageable.convert());
+    }
 
 
 }

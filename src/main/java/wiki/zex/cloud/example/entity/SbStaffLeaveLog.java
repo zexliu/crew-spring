@@ -1,11 +1,8 @@
 package wiki.zex.cloud.example.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-
 import java.time.LocalDateTime;
-
 import com.baomidou.mybatisplus.annotation.TableId;
-
 import java.io.Serializable;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -15,42 +12,45 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import wiki.zex.cloud.example.config.serializers.JsonLongSerializer;
+import wiki.zex.cloud.example.enums.LeaveLogType;
 
 /**
  * <p>
- *
+ * 请假审核记录
  * </p>
  *
  * @author Zex
- * @since 2020-07-15
+ * @since 2020-07-21
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value = "SnAnnouncementTemplate对象", description = "")
-public class SnAnnouncementTemplate implements Serializable {
+@ApiModel(value="SbStaffLeaveLog对象", description="请假审核记录")
+public class SbStaffLeaveLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     @JsonSerialize(using = JsonLongSerializer.class)
+
     private Long id;
-    @ApiModelProperty(value = "模板编码")
+    @JsonSerialize(using = JsonLongSerializer.class)
 
-    private String templateCode;
-    @ApiModelProperty(value = "模板标题")
+    @ApiModelProperty(value = "请假ID")
+    private Long leaveId;
 
-    private String templateTitle;
-    @ApiModelProperty(value = "模板内容")
+    @ApiModelProperty(value = "操作人ID")
+    @JsonSerialize(using = JsonLongSerializer.class)
+    private Long operatorId;
 
-    private String templateContent;
-
-    @ApiModelProperty(value = "公告类型")
-
-    private Integer announcementType;
     @ApiModelProperty(value = "创建时间")
-
     private LocalDateTime createAt;
+
+    @ApiModelProperty(value = "备注")
+    private String description;
+
+    @ApiModelProperty(value = "记录类型")
+    private LeaveLogType type;
 
 
 }

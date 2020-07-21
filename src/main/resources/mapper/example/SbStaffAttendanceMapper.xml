@@ -25,7 +25,8 @@
         ssa.staff_team_id,
         ssa.staff_group_id,
         su.real_name,
-        su.avatar
+        su.avatar,
+        su.work_no
         from sb_staff_attendance ssa
         left join sb_staff ss on ssa.staff_id = ss.id
         left join sy_user su on ss.user_id = su.id
@@ -53,6 +54,37 @@
                 and ssa.staff_id = #{staffId}
             </if>
         </where>
+    </select>
+    <select id="led" resultType="wiki.zex.cloud.example.resp.SbStaffAttendanceResp">
+        SELECT ssa.id,
+               ssa.staff_id,
+               ssa.route_item_id,
+               ssa.route_item_no,
+               ssa.date,
+               ssa.distance,
+               ssa.duration,
+               ssa.attendance_at,
+               ssa.back_at,
+               ssa.real_attendance_at,
+               ssa.real_back_at,
+               ssa.answer_accuracy,
+               ssa.alcohol_value,
+               ssa.alcohol_result,
+               ssa.attendance_device_id,
+               ssa.back_device_id,
+               ssa.attendance_status,
+               ssa.back_status,
+               ssa.staff_team_id,
+               ssa.staff_group_id,
+               su.real_name,
+               su.avatar,
+               su.work_no,
+               IF
+                   (ssa.real_back_at IS NOT NULL, ssa.real_back_at, ssa.real_attendance_at) update_at
+        FROM sb_staff_attendance ssa
+                 LEFT JOIN sb_staff ss ON ssa.staff_id = ss.id
+                 LEFT JOIN sy_user su ON ss.user_id = su.id
+        ORDER BY update_at DESC
     </select>
 
 </mapper>

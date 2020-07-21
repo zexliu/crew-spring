@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import wiki.zex.cloud.example.req.Pageable;
 import wiki.zex.cloud.example.req.StaffSchedulingReq;
 import wiki.zex.cloud.example.resp.SbStaffSchedulingDayResp;
+import wiki.zex.cloud.example.resp.SchedulingPlanResp;
 import wiki.zex.cloud.example.resp.SimpleResp;
 import wiki.zex.cloud.example.service.ISbStaffSchedulingService;
 import wiki.zex.cloud.example.service.ISbStaffService;
@@ -40,12 +41,19 @@ public class SbStaffSchedulingController {
 
     @GetMapping("/day")
     public IPage<SbStaffSchedulingDayResp> day(Pageable pageable, @RequestParam LocalDate date, Long shiftId,
-                                                 Long shiftGroupId,
-                                                 String routeItemNo,
-                                                 Long staffTeamId,
-                                                 Long staffGroupId) {
+                                               Long shiftGroupId,
+                                               String routeItemNo,
+                                               Long staffTeamId,
+                                               Long staffGroupId) {
 //        return iSbStaffService.scheduling(pageable.convert(),date);
         return iSbStaffService.day( pageable.convert(), date, shiftGroupId, shiftId,routeItemNo,staffTeamId,staffGroupId);
     }
+
+    @GetMapping("/led")
+    public IPage<SchedulingPlanResp> led(Pageable pageable) {
+        return iSbStaffService.led(pageable.convert());
+    }
+
+
 
 }

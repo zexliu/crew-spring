@@ -24,4 +24,7 @@ public class SnAnnouncementReq {
     private Integer announcementType;
     @ApiModelProperty(value = "参数")
     private String params;
+
+    @ApiModelProperty(value = "有效状态")
+    private Boolean validStatus;
 }

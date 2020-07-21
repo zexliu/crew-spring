@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SbSafeConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SbSafeConfig">
+        <id column="id" property="id"/>
+        <result column="create_at" property="createAt"/>
+        <result column="safe1_at" property="safe1At"/>
+        <result column="safe2_at" property="safe2At"/>
+        <result column="safe3_at" property="safe3At"/>
+        <result column="safe4_at" property="safe4At"/>
+        <result column="safe5_at" property="safe5At"/>
+        <result column="type" property="type"/>
+        <result column="description" property="description"/>
+        <result column="operator_id" property="operatorId"/>
+    </resultMap>
+    <select id="list" resultType="wiki.zex.cloud.example.resp.SbSafeConfigResp">
+        select ssc.id,
+        ssc.create_at,
+        ssc.safe1_at,
+        ssc.safe2_at,
+        ssc.safe3_at,
+        ssc.safe4_at,
+        ssc.safe5_at,
+        ssc.type,
+        ssc.description,
+        ssc.operator_id,
+        su.nickname
+        from sb_safe_config ssc
+        left join sy_user su on su.id = ssc.operator_id
+        <where>
+            1= 1
+            <if test="type != null">
+                and ssc.type = #{type}
+            </if>
+        </where>
+        order by ssc.create_at desc
+    </select>
+
+</mapper>

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import wiki.zex.cloud.example.resp.SbStaffDetailsResp;
 import wiki.zex.cloud.example.resp.SbStaffResp;
 import wiki.zex.cloud.example.resp.SbStaffSchedulingDayResp;
+import wiki.zex.cloud.example.resp.SchedulingPlanResp;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,4 +45,6 @@ public interface SbStaffMapper extends BaseMapper<SbStaff> {
                                         @Param("routeItemNo")String routeItemNo,
                                         @Param("staffTeamId")Long staffTeamId,
                                         @Param("staffGroupId")Long staffGroupId);
+
+    IPage<SchedulingPlanResp> led(Page<SchedulingPlanResp> page);
 }

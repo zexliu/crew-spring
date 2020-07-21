@@ -72,7 +72,7 @@
                sri.create_at,
                sri.up
         from sb_runtime_item sri
-                 left join sb_route_runtime_relation srrr on srrr.runtime_item_id = sri.id
+                 left join sb_route_runtime_rel srrr on srrr.runtime_item_id = sri.id
         where srrr.route_item_id = #{routeItemId}
     </select>
 

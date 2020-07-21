@@ -442,7 +442,7 @@ CREATE TABLE `sn_announcement_template` (
 `template_code` varchar(32) NULL COMMENT '模板编码',
 `template_title` varchar(32) NULL COMMENT '模板标题',
 `template_content` varchar(255) NULL COMMENT '模板内容',
-`create_at` datetime NULL,
+`create_at` datetime NULL DEFAULT CURRENT_TIMESTAMP,
 `announcement_type` tinyint(4) NULL COMMENT '模板类型',
 PRIMARY KEY (`id`) 
 );
@@ -455,8 +455,45 @@ CREATE TABLE `sn_announcement` (
 `create_at` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 `params` varchar(200) NULL COMMENT '参数',
 `announcement_type` tinyint(4) NULL,
+`valid_status` tinyint(1) NULL DEFAULT 1 COMMENT '有效状态',
 PRIMARY KEY (`id`) 
 );
+CREATE TABLE `sb_safe_config` (
+`id` bigint(11) NOT NULL,
+`create_at` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+`safe1_at` date NULL COMMENT '重大安全事故',
+`safe2_at` date NULL COMMENT '大安全事故',
+`safe3_at` date NULL COMMENT '较大安全事故',
+`safe4_at` date NULL COMMENT '一般安全事故',
+`safe5_at` date NULL COMMENT '老动人身安全事故',
+`type` tinyint(4) NULL COMMENT '操作类型',
+`description` varchar(200) NULL COMMENT '备注',
+`operator_id` bigint(11) NULL COMMENT '操作人ID',
+PRIMARY KEY (`id`) 
+);
+CREATE TABLE `sb_staff_leave` (
+`id` bigint(11) NOT NULL,
+`type` tinyint(4) NULL COMMENT '请假类型',
+`user_id` bigint(11) NULL COMMENT '人员ID',
+`create_at` datetime NULL COMMENT '创建时间',
+`status` tinyint(4) NULL COMMENT '审批状态',
+`description` varchar(200) NULL COMMENT '备注',
+`leave_at` date NULL COMMENT '离队日期',
+`back_at` date NULL COMMENT '归队日期',
+`days` int(11) NULL COMMENT '天数',
+PRIMARY KEY (`id`) 
+)
+COMMENT = '请假表';
+CREATE TABLE `sb_staff_leave_log` (
+`id` bigint(11) NOT NULL,
+`leave_id` bigint(11) NULL COMMENT '请假ID',
+`operator_id` bigint(11) NULL COMMENT '操作人ID',
+`create_at` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+`description` varchar(200) NULL COMMENT '备注',
+`type` tinyint(4) NULL COMMENT '记录类型',
+PRIMARY KEY (`id`) 
+)
+COMMENT = '请假审核记录';
 
 ALTER TABLE `sy_permission` ADD CONSTRAINT `fk_sy_permission_sy_permission_1` FOREIGN KEY (`parent_id`) REFERENCES `sy_permission` (`id`);
 ALTER TABLE `sy_role_permission_rel` ADD CONSTRAINT `fk_sy_role_permission_rel_sy_permission_1` FOREIGN KEY (`permission_id`) REFERENCES `sy_permission` (`id`);
@@ -494,4 +531,5 @@ ALTER TABLE `sb_staff` ADD CONSTRAINT `fk_sb_staff_sb_staff_group_1` FOREIGN KEY
 ALTER TABLE `sb_route_item` ADD CONSTRAINT `fk_sb_route_item_sb_shift_group_1` FOREIGN KEY (`shift_group_id`) REFERENCES `sb_shift_group` (`id`);
 ALTER TABLE `sb_route_runtime_rel` ADD CONSTRAINT `fk_sb_route_runtime_relation_sb_runtime_item_1` FOREIGN KEY (`runtime_item_id`) REFERENCES `sb_runtime_item` (`id`);
 ALTER TABLE `sn_notification_user_rel` ADD CONSTRAINT `fk_sn_notificatoin_user_rel_sn_notification_1` FOREIGN KEY (`notification_id`) REFERENCES `sn_notification` (`id`);
+ALTER TABLE `sb_staff_leave_log` ADD CONSTRAINT `fk_sb_staff_leave_log_sb_staff_leave_1` FOREIGN KEY (`leave_id`) REFERENCES `sb_staff_leave` (`id`);
 

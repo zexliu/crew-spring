@@ -94,7 +94,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(passwordEncoder.encode("secret"))
                 .refreshTokenValiditySeconds(3600 * 30)
                 .accessTokenValiditySeconds(600)
-                .authorizedGrantTypes("password", "refresh_token")
+                .authorizedGrantTypes("password", "refresh_token","authorization_code")
                 .scopes("all");
         super.configure(clients);
     }
@@ -113,7 +113,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         tokenEnhancers.add(jwtAccessTokenConverter());
         tokenEnhancerChain.setTokenEnhancers(tokenEnhancers);
 
-        endpoints.allowedTokenEndpointRequestMethods(HttpMethod.POST)
+        endpoints.allowedTokenEndpointRequestMethods(HttpMethod.GET,HttpMethod.POST)
                 .tokenStore(tokenStore())
                 .tokenEnhancer(tokenEnhancerChain)
                 .authenticationManager(authenticationManager)

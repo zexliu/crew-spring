@@ -14,6 +14,8 @@ import wiki.zex.cloud.example.resp.SimpleResp;
 import wiki.zex.cloud.example.service.ISnAnnouncementService;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -29,9 +31,12 @@ public class SnAnnouncementController {
     @Autowired
     private ISnAnnouncementService iSnAnnouncementService;
     @GetMapping
-    public IPage<SnAnnouncement> list(Pageable pageable, Integer announcementType , String keywords) {
+    public IPage<SnAnnouncement> list(Pageable pageable, Integer announcementType , String keywords,Boolean validStatus,Boolean validTime) {
         return iSnAnnouncementService.page(pageable.convert(),new LambdaQueryWrapper<SnAnnouncement>()
                 .eq(announcementType != null, SnAnnouncement::getAnnouncementType,announcementType)
+                .eq(validStatus != null,SnAnnouncement::getValidStatus,validStatus)
+                .and(validTime != null, i -> i.ge(SnAnnouncement::getValidStartAt, LocalDateTime.now()).or().isNull(SnAnnouncement::getValidStartAt))
+                .and(validTime != null, i -> i.le(SnAnnouncement::getValidEndAt, LocalDateTime.now()).or().isNull(SnAnnouncement::getValidEndAt))
                 .like(StringUtils.isNotBlank(keywords),SnAnnouncement::getTitle,keywords));
     }
 

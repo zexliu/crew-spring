@@ -8,6 +8,7 @@ import wiki.zex.cloud.example.req.SbStaffReq;
 import wiki.zex.cloud.example.resp.SbStaffDetailsResp;
 import wiki.zex.cloud.example.resp.SbStaffResp;
 import wiki.zex.cloud.example.resp.SbStaffSchedulingDayResp;
+import wiki.zex.cloud.example.resp.SchedulingPlanResp;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -47,4 +48,6 @@ public interface ISbStaffService extends IService<SbStaff> {
 
 
     IPage<SbStaffSchedulingDayResp>  day(Page<SbStaffSchedulingDayResp> page, LocalDate date, Long shiftGroupId, Long shiftId, String routeItemNo, Long staffTeamId, Long staffGroupId);
+
+    IPage<SchedulingPlanResp> led(Page<SchedulingPlanResp> page);
 }

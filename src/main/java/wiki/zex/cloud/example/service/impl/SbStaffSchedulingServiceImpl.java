@@ -1,6 +1,7 @@
 package wiki.zex.cloud.example.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,12 @@ public class SbStaffSchedulingServiceImpl implements ISbStaffSchedulingService {
     @Override
     @Transactional
     public void generate(StaffSchedulingReq req) {
+
+        //删除以前生成的数据
+
+        iSbStaffTeamSchedulingService.remove(new LambdaUpdateWrapper<SbStaffTeamScheduling>().ge(SbStaffTeamScheduling::getDate,req.getStartAt()));
+
+        iSbStaffGroupSchedulingService.remove(new LambdaUpdateWrapper<SbStaffGroupScheduling>().ge(SbStaffGroupScheduling::getDate,req.getStartAt()));
 
         List<SbStaffTeamScheduling> teamSchedulingList = new ArrayList<>();
         List<SbStaffGroupScheduling> groupSchedulingList = new ArrayList<>();

@@ -16,6 +16,7 @@ import wiki.zex.cloud.example.req.SyUserReq;
 import wiki.zex.cloud.example.resp.SbStaffDetailsResp;
 import wiki.zex.cloud.example.resp.SbStaffResp;
 import wiki.zex.cloud.example.resp.SbStaffSchedulingDayResp;
+import wiki.zex.cloud.example.resp.SchedulingPlanResp;
 import wiki.zex.cloud.example.service.ISbStaffService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -132,6 +133,11 @@ public class SbStaffServiceImpl extends ServiceImpl<SbStaffMapper, SbStaff> impl
     @Override
     public IPage<SbStaffSchedulingDayResp> day(Page<SbStaffSchedulingDayResp> page, LocalDate date, Long shiftGroupId, Long shiftId, String routeItemNo, Long staffTeamId, Long staffGroupId) {
         return baseMapper.day(page,date,shiftId, shiftGroupId, routeItemNo, staffTeamId, staffGroupId);
+    }
+
+    @Override
+    public IPage<SchedulingPlanResp> led(Page<SchedulingPlanResp> page) {
+        return baseMapper.led(page);
     }
 
 

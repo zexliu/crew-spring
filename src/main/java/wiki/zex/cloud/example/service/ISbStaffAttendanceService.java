@@ -19,4 +19,6 @@ import java.time.LocalDate;
 public interface ISbStaffAttendanceService extends IService<SbStaffAttendance> {
 
     IPage<SbStaffAttendanceResp> list(Page<SbStaffAttendanceResp> page, Long staffId, Integer alcoholResult, Integer attendanceStatus, Integer backStatus, Integer answerStatus, LocalDate date);
+
+    IPage<SbStaffAttendanceResp> led(Page<SbStaffAttendanceResp> page);
 }

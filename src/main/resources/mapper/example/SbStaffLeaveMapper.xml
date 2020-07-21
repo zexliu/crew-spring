@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SbStaffLeaveMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SbStaffLeave">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="user_id" property="userId"/>
+        <result column="create_at" property="createAt"/>
+        <result column="status" property="status"/>
+        <result column="description" property="description"/>
+        <result column="leave_at" property="leaveAt"/>
+        <result column="back_at" property="backAt"/>
+        <result column="days" property="days"/>
+    </resultMap>
+    <select id="leaves" resultType="wiki.zex.cloud.example.resp.SbStaffLeaveResp">
+        SELECT sl.id,
+        sl.type,
+        sl.user_id,
+        sl.create_at,
+        sl.status,
+        sl.description,
+        sl.leave_at,
+        sl.back_at,
+        sl.days,
+        su.avatar,
+        su.real_name
+        FROM sb_staff_leave sl
+        LEFT JOIN sy_user su on su.id = sl.user_id
+        <where>
+            1=1
+            <if test="userId != null">
+                and sl.user_id = #{userId}
+            </if>
+            <if test="status != null">
+                and sl.status = #{status}
+            </if>
+            <if test="type != null">
+                and sl.type = #{type}
+            </if>
+        </where>
+    </select>
+    <resultMap id="Details" type="wiki.zex.cloud.example.resp.SbStaffLeaveDetails">
+        <collection property="logs" select="wiki.zex.cloud.example.mapper.SbStaffLeaveLogMapper.sList" column="leaveId = id"/>
+    </resultMap>
+    <select id="details"  resultMap="Details">
+        SELECT sl.id,
+               sl.type,
+               sl.user_id,
+               sl.create_at,
+               sl.status,
+               sl.description,
+               sl.leave_at,
+               sl.back_at,
+               sl.days,
+               su.avatar,
+               su.real_name
+        FROM sb_staff_leave sl
+                 LEFT JOIN sy_user su on su.id = sl.user_id
+        where sl.id = #{id}
+    </select>
+
+
+</mapper>

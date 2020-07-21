@@ -28,4 +28,6 @@ public interface SbStaffAttendanceMapper extends BaseMapper<SbStaffAttendance> {
                                       @Param("answerStatus")Integer answerStatus,
                                       @Param("date")LocalDate date);
 
+    IPage<SbStaffAttendanceResp> led(Page<SbStaffAttendanceResp> page);
+
 }

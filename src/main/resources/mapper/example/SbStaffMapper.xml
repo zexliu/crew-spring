@@ -175,5 +175,29 @@
             </if>
         </where>
     </select>
+    <select id="led" resultType="wiki.zex.cloud.example.resp.SchedulingPlanResp">
+        SELECT
+            sri.route_item_no,
+            sri.attendance_at,
+            sri.attendance_station_id,
+            sri.back_at,
+            sri.back_station_id,
+            sri.meet_at,
+            sri.meet_station_id,
+            stts.staff_team_id,
+            ssgs.staff_group_id
+        FROM
+            sb_route_item sri
+                LEFT JOIN sb_route_table srt ON srt.id = sri.table_id
+                LEFT JOIN sb_runtime_table_date srtd ON srtd.table_id = srt.runtime_table_id
+                LEFT JOIN sb_staff_team_scheduling stts ON stts.date = srtd.date
+                AND stts.shift_group_id = sri.shift_group_id
+                LEFT JOIN sb_staff_group_scheduling ssgs ON ssgs.date = srtd.date
+                AND ssgs.route_item_id = sri.id
+        WHERE
+            (srtd.date = CURRENT_DATE() OR srtd.date = date_add( CURRENT_DATE(), INTERVAL 1 DAY )) AND STR_TO_DATE( CONCAT_WS( ' ', stts.date, sri.attendance_at ), '%Y-%m-%d %H:%i:%s' ) >= now( )
+        ORDER BY
+            STR_TO_DATE( CONCAT_WS( ' ', stts.date, sri.attendance_at ), '%Y-%m-%d %H:%i:%s' )
+    </select>
 
 </mapper>

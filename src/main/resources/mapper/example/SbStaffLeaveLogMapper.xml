@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SbStaffLeaveLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SbStaffLeaveLog">
+        <id column="id" property="id"/>
+        <result column="leave_id" property="leaveId"/>
+        <result column="operator_id" property="operatorId"/>
+        <result column="create_at" property="createAt"/>
+        <result column="description" property="description"/>
+        <result column="type" property="type"/>
+    </resultMap>
+    <select id="page" resultType="wiki.zex.cloud.example.resp.SbStaffLeaveLogResp">
+        select ssll.id,
+               ssll.leave_id,
+               ssll.operator_id,
+               ssll.create_at,
+               ssll.description,
+               ssll.type,
+               su.avatar,
+               su.real_name
+        from sb_staff_leave_log ssll
+                 left join sy_user su on ssll.operator_id = su.id
+        order by create_at desc
+    </select>
+
+
+    <select id="sList" resultType="wiki.zex.cloud.example.resp.SbStaffLeaveLogResp">
+        select ssll.id,
+               ssll.leave_id,
+               ssll.operator_id,
+               ssll.create_at,
+               ssll.description,
+               ssll.type,
+               su.avatar,
+               su.real_name
+        from sb_staff_leave_log ssll
+                 left join sy_user su on ssll.operator_id = su.id
+        where ssll.leave_id = #{leaveId}
+        order by create_at desc
+    </select>
+
+</mapper>

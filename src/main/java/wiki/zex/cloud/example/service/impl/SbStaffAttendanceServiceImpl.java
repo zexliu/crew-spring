@@ -26,4 +26,9 @@ public class SbStaffAttendanceServiceImpl extends ServiceImpl<SbStaffAttendanceM
     public IPage<SbStaffAttendanceResp> list(Page<SbStaffAttendanceResp> page, Long staffId, Integer alcoholResult, Integer attendanceStatus, Integer backStatus, Integer answerStatus, LocalDate date) {
         return baseMapper.list(page,staffId,alcoholResult,attendanceStatus,backStatus,answerStatus,date);
     }
+
+    @Override
+    public IPage<SbStaffAttendanceResp> led(Page<SbStaffAttendanceResp> page) {
+        return baseMapper.led(page);
+    }
 }
